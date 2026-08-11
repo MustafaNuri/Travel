@@ -1,0 +1,176 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: #000;
+    color: #eee;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #111;
+    padding: 0 20px;
+    height: 60px;
+    border-bottom: 1px solid #333;
+}
+
+.links a {
+    color: #aaa;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.links a:hover {
+    color: #fff;
+}
+
+#icerik-alani {
+    height: calc(100vh - 60px);
+    width: 100%;
+}
+
+#harita-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.logo-alani {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-alani img {
+    width: 30px;
+    height: 30px;
+}
+
+.logo-alani h2 {
+    margin: 0;
+}
+
+.links a.active {
+    font-weight: bold;
+    color: #fff;
+}
+
+.sayfa-duzeni {
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-right: 1px solid #333;
+    overflow-y: auto;
+}
+
+.sidebar h3 {
+    margin-top: 0;
+    color: #ddd;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    color: #aaa;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.aktif-yan {
+    color: #fff;
+    font-weight: bold;
+}
+
+#md-icerik {
+    scroll-behavior: smooth; /* Tıklayınca yumuşak kaydırma */
+}
+
+.metin {
+    padding: 40px 0;
+    flex: 1; /* Yan menüden kalan tüm boşluğu kaplar */
+    width: 100%; /* Çerçevenin en sağa kadar uzanmasını garantiler */
+    overflow-y: auto; /* Scrollbar'ı bu geniş çerçevenin en sağına yerleştirir */
+    line-height: 1.6;
+}
+
+.okuma-bolumu {
+    max-width: 800px; /* Genişliği sadece metin bazında kısıtlar */
+    margin: 0 auto 80px auto; /* Metni o devasa çerçevenin tam ortasına hizalar */
+    padding: 0 20px;
+    min-height: 50vh;
+}
+
+/* Scrollbar Tasarımı (Karanlık Tema) */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000; /* Scrollbar arka planı */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333; /* Kaydırma çubuğunun rengi */
+    border-radius: 6px;
+    border: 3px solid #000; /* Çubuğun etrafında ince bir boşluk yaratır */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.okuma-bolumu a {
+    color: #4da6ff; 
+    text-decoration: none;
+    border-bottom: 1px solid #4da6ff; 
+    transition: all 0.2s ease-in-out;
+}
+
+.okuma-bolumu a:hover {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+    background-color: rgba(77, 166, 255, 0.1); 
+}
+
+.wiki-kategoriler {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.kategori-kutu {
+    background-color: #111;
+    border: 1px solid #333;
+    padding: 30px 20px;
+    border-radius: 8px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.kategori-kutu:hover {
+    border-color: #4da6ff;
+}
+
+.kategori-kutu h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #ddd;
+}

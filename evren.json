@@ -1,0 +1,498 @@
+{
+    "sistemler": [
+        {
+        "isim": "Sol",
+        "x": 0.0, "y": 0.0, "z": 0.0,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "G",
+        "renk": "#ffdd44",
+        "gezegenler": ["Dünya", "Mars"],
+        "Uydular": ["Ay (Dünya)"]
+        },
+        {
+        "isim": "Alfa Centauri A/B",
+        "x": 1.63, "y": 1.37, "z": -3.82,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "G/K",
+        "renk": "#ffaa44",
+        "gezegenler": [""]
+        },
+        {
+        "isim": "Proxima Centauri",
+        "x": 1.55, "y": 1.18, "z": -3.77,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": [""]
+        },
+        {
+        "isim": "Schrodinger",
+        "x": 5.2, "y": 4.1, "z": -3,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": []
+        },
+        {
+        "isim": "Yomria",
+        "x": 3.41, "y": 2.59, "z": -7.74,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": []
+        },
+        {
+        "isim": "Baiola",
+        "x": 7.7, "y": 1.2, "z": -7.6,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "G",
+        "renk": "#ffdd44",
+        "gezegenler": []
+        },
+        {
+        "isim": "Dinia",
+        "x": 9, "y": 1, "z": -4.2,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "G",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Peranza",
+        "x": 11, "y": 2.5, "z": -7.2,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "G",
+        "renk": "#ff4422",
+        "gezegenler": []
+        },
+        {
+        "isim": "Henya",
+        "x": 10.8, "y": 3.4, "z": -6.9,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "G",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Tau Ceti",
+        "x": 10.29, "y": 5.02, "z": -3.27,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "G",
+        "renk": "#ffdd66",
+        "gezegenler": ["Pardis"]
+        },
+        {
+        "isim": "Bernoulli",
+        "x": 7.88, "y": 5.93, "z": -0.5,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "G",
+        "renk": "#ffdd66",
+        "gezegenler": []
+        },
+        {
+        "isim": "Epsilon Eridani",
+        "x": 6.21, "y": 8.31, "z": -1.73,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "K",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Doria",
+        "x": 8.9, "y": -2.5, "z": -7.1,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "K",
+        "renk": "#f4f6ff",
+        "gezegenler": []
+        },
+        {
+        "isim": "Alice",
+        "x": 12, "y": -3.9, "z": -5,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "K",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Bob",
+        "x": 12.1, "y": -4.1, "z": -5,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "K",
+        "renk": "#ffdd44",
+        "gezegenler": []
+        },
+        {
+        "isim": "Epsilon Indi",
+        "x": 5.69, "y": -3.17, "z": -9.95,
+        "devlet": "Merkez Cumhuriyeti",
+        "tip": "K",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Anahtar",
+        "x": 2.3, "y": 8.5, "z": -2.1,
+        "devlet": "Yildiz Ateseligi",
+        "tip": "A",
+        "renk": "#ffffff",
+        "gezegenler": []
+        },
+        {
+        "isim": "Sirius",
+        "x": -1.63, "y": 8.16, "z": -2.48,
+        "devlet": "Yildiz Ateseligi",
+        "tip": "A",
+        "renk": "#add8e6",
+        "gezegenler": []
+        },
+        {
+        "isim": "Eminence",
+        "x": -5.8, "y": 5.89, "z": -1.5,
+        "devlet": "Yildiz Ateseligi",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Wolf 359",
+        "x": -7.50, "y": 2.14, "z": 0.96,
+        "devlet": "Daytona Rejimi",
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": ["Wolf 359 b", "Wolf 359 c"]
+        },
+        {
+        "isim": "Daytona",
+        "x": -7.2, "y": 4.1, "z": 5,
+        "devlet": "Daytona Rejimi",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Tadil",
+        "x": -8, "y": 0.1, "z": 5.2,
+        "devlet": "Daytona Rejimi",
+        "tip": "M",
+        "renk": "#ffdd44",
+        "gezegenler": []
+        },
+        {
+        "isim": "Kito",
+        "x": -8, "y": 4.2, "z": -5.2,
+        "devlet": "Pulsar Koloni Devleti",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Andia",
+        "x": -6.1, "y": 2.2, "z": -6.2,
+        "devlet": "Pulsar Koloni Devleti",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": ["Locket"]
+        },
+        {
+        "isim": "Penton",
+        "x": -6.1, "y": 2.2, "z": -3.2,
+        "devlet": "Pulsar Koloni Devleti",
+        "tip": "M",
+        "renk": "#0x000033",
+        "gezegenler": []
+        },
+        {
+        "isim": "Kon",
+        "x": -7.1, "y": -0.5, "z": -3.2,
+        "devlet": "Pulsar Koloni Devleti",
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": []
+        },
+        {
+        "isim": "Eshelon",
+        "x": -9, "y": 0.1, "z": -4.2,
+        "devlet": "Pulsar Koloni Devleti",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Selton",
+        "x": -7.3, "y": -1, "z": -2.9,
+        "devlet": "Pulsar Koloni Devleti",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Alfa Zemura",
+        "x": -12, "y": -3, "z": -3.9,
+        "devlet": "Pulsar Genişleme Bölgesi",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Beta Zemura",
+        "x": -12.1, "y": -3.2, "z": -3.5,
+        "devlet": "Pulsar Genişleme Bölgesi",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "1",
+        "x": -12.3, "y": -2, "z": 0,
+        "devlet": "Pulsar Genişleme Bölgesi",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "2",
+        "x": -16.3, "y": -1, "z": -1.9,
+        "devlet": "Pulsar Genişleme Bölgesi",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "3",
+        "x": -9, "y": -5, "z": -1,
+        "devlet": "Pulsar Genişleme Bölgesi",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Alfa Kefir",
+        "x": -7.3, "y": -3, "z": 0,
+        "devlet": "Pulsar Genişleme Bölgesi",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Gama Kefir",
+        "x": -7.3, "y": -3, "z": -0.1,
+        "devlet": "Pulsar Genişleme Bölgesi",
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": []
+        },
+        {
+        "isim": "Nehir",
+        "x": -13.3, "y": -7.3, "z": -3.2,
+        "devlet": "",
+        "tip": "M",
+        "renk": "#fff5cc",
+        "gezegenler": []
+        },
+        {
+        "isim": "Ipsiya",
+        "x": -14.8, "y": -10, "z": -0.2,
+        "devlet": "Dış Yerleşimler",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Nira",
+        "x": -11.1, "y": -12, "z": -1,
+        "devlet": "Dış Yerleşimler",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Gliese 581",
+        "x": -13.06, "y": -15.63, "z": -2.76,
+        "devlet": "Dış Yerleşimler",
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": []
+        },
+        {
+        "isim": "Banshe",
+        "x": -10.2, "y": -12.5, "z": 3.5,
+        "devlet": "Dış Yerleşimler",
+        "tip": "M",
+        "renk": "#fff5cc",
+        "gezegenler": []
+        },
+        {
+        "isim": "Zanovia",
+        "x": -8.2, "y": -11.2, "z": 6.2,
+        "devlet": "Dış Yerleşimler",
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": []
+        },
+        {
+        "isim": "Kvaria",
+        "x": -8, "y": -13.2, "z": -2.76,
+        "devlet": "Üç Yıldız Şehirleri",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Demina",
+        "x": -3.7, "y": -12.3, "z": -1.2,
+        "devlet": "Üç Yıldız Şehirleri",
+        "tip": "M",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Onlan",
+        "x": -5.9, "y": -12.63, "z": 1.3,
+        "devlet": "Üç Yıldız Şehirleri",
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": []
+        },
+        {
+        "isim": "Altair",
+        "x": 7.62, "y": -14.63, "z": 2.57,
+        "tip": "A",
+        "renk": "#add8e6",
+        "gezegenler": []
+        },
+        {
+        "isim": "Vega",
+        "x": 2.45, "y": 24.62, "z": 3.73,
+        "tip": "A",
+        "renk": "#add8e6",
+        "gezegenler": []
+        },
+        {
+        "isim": "Fomalhaut",
+        "x": 3.82, "y": 21.32, "z": -12.44,
+        "tip": "A",
+        "renk": "#add8e6",
+        "gezegenler": []
+        },
+        {
+        "isim": "40 Eridani B",
+        "x": 7.17, "y": 14.58, "z": -2.18,
+        "tip": "DA",
+        "renk": "#f4f6ff",
+        "gezegenler": []
+        },
+        {
+        "isim": "Procyon",
+        "x": -4.79, "y": 10.36, "z": 1.04,
+        "tip": "F",
+        "renk": "#fff5cc",
+        "gezegenler": []
+        },
+        {
+        "isim": "Arcturus",
+        "x": -28.78, "y": -19.34, "z": 12.06,
+        "tip": "K",
+        "renk": "#ffaa44",
+        "gezegenler": []
+        },
+        {
+        "isim": "Capella",
+        "x": 5.60, "y": 29.27, "z": 30.86,
+        "tip": "G",
+        "renk": "#ffdd44",
+        "gezegenler": []
+        },
+        {
+        "isim": "Pollux",
+        "x": -13.22, "y": 26.71, "z": 15.87,
+        "tip": "K",
+        "renk": "#ff9944",
+        "gezegenler": []
+        },
+        {
+        "isim": "Barnard Star",
+        "x": -0.16, "y": -5.92, "z": 0.49,
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": ["Barnard b"]
+        },
+        {
+        "isim": "Sintonia",
+        "x": 0.89, "y": -9.92, "z": 1.9,
+        "tip": "M",
+        "renk": "#ffdd44",
+        "gezegenler": []
+        },
+        {
+        "isim": "Gena",
+        "x": -4.64, "y": 7.89, "z": -0.16,
+        "tip": "M",
+        "renk": "#ff4422",
+        "gezegenler": []
+        },
+        {
+        "isim": "Berona",
+        "x": -4.64, "y": 10.89, "z": 5,
+        "tip": "M",
+        "renk": "#ffdd44",
+        "gezegenler": []
+        }
+
+        
+
+        ],
+        "baglantilar": [
+        { "yildiz1": "Sol", "yildiz2": "Alfa Centauri A/B" },
+        { "yildiz1": "Alfa Centauri A/B", "yildiz2": "Yomria" },
+        { "yildiz1": "Alfa Centauri A/B", "yildiz2": "Schrodinger" },
+        { "yildiz1": "Yomria", "yildiz2": "Baiola" },
+        { "yildiz1": "Baiola", "yildiz2": "Dinia" },
+        { "yildiz1": "Baiola", "yildiz2": "Peranza" },
+        { "yildiz1": "Peranza", "yildiz2": "Henya" },
+        { "yildiz1": "Peranza", "yildiz2": "Dinia" },
+        { "yildiz1": "Henya", "yildiz2": "Tau Ceti" },
+        { "yildiz1": "Tau Ceti", "yildiz2": "Bernoulli" },
+        { "yildiz1": "Bernoulli", "yildiz2": "Epsilon Eridani" },
+        { "yildiz1": "Epsilon Eridani", "yildiz2": "Anahtar" },
+        { "yildiz1": "Anahtar", "yildiz2": "Sirius" },
+        { "yildiz1": "Baiola", "yildiz2": "Doria" },
+        { "yildiz1": "Doria", "yildiz2": "Epsilon Indi" },
+        { "yildiz1": "Doria", "yildiz2": "Alice" },
+        { "yildiz1": "Eminence", "yildiz2": "Gena" },
+        { "yildiz1": "Eminence", "yildiz2": "Wolf 359" },
+        { "yildiz1": "Eminence", "yildiz2": "Sirius" },
+        { "yildiz1": "Gena", "yildiz2": "Procyon" },
+        { "yildiz1": "Berona", "yildiz2": "Procyon" },
+        { "yildiz1": "Barnard Star", "yildiz2": "Sintonia"},
+        { "yildiz1": "Daytona", "yildiz2": "Wolf 359"},
+        { "yildiz1": "Tadil", "yildiz2": "Wolf 359"},
+        { "yildiz1": "Daytona", "yildiz2": "Tadil"},
+        { "yildiz1": "Eminence", "yildiz2": "Kito"},
+        { "yildiz1": "Andia", "yildiz2": "Kito"},
+        { "yildiz1": "Penton", "yildiz2": "Kito"},
+        { "yildiz1": "Andia", "yildiz2": "Penton"},
+        { "yildiz1": "Penton", "yildiz2": "Kon"},
+        { "yildiz1": "Andia", "yildiz2": "Kon"},
+        { "yildiz1": "Kon", "yildiz2": "Selton"},
+        { "yildiz1": "Andia", "yildiz2": "Eshelon"},
+        { "yildiz1": "Alfa Zemura", "yildiz2": "Eshelon"},
+        { "yildiz1": "Beta Zemura", "yildiz2": "Nehir"},
+        { "yildiz1": "Alfa Zemura", "yildiz2": "Beta Zemura"},
+        { "yildiz1": "Gama Kefir", "yildiz2": "Selton"},
+        { "yildiz1": "Barnard Star", "yildiz2": "Sol"},
+        { "yildiz1": "Ipsiya", "yildiz2": "Nehir"},
+        { "yildiz1": "Ipsiya", "yildiz2": "Nira"},
+        { "yildiz1": "Gliese 581", "yildiz2": "Nira"},
+        { "yildiz1": "Gama Kefir", "yildiz2": "Selton"},
+        { "yildiz1": "Banshe", "yildiz2": "Nira"},
+        { "yildiz1": "Banshe", "yildiz2": "Zanovia"},
+        { "yildiz1": "Demina", "yildiz2": "Onlan"},
+        { "yildiz1": "Nira", "yildiz2": "Kvaria"},
+        { "yildiz1": "Kvaria", "yildiz2": "Demina"},
+        { "yildiz1": "Kvaria", "yildiz2": "Onlan"},
+        { "yildiz1": "Sintonia", "yildiz2": "Demina"}
+
+    ]
+}
+
+

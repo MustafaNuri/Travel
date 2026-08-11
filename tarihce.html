@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tarihçe - Kurgusal Evren</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-alani">
+            <img src="img/galaxy.svg" alt="Galaksi Logosu">
+            <h2>Bilinen Galaksi</h2>
+        </div>
+        <div class="links">
+            <a href="index.html">Yıldız Haritası</a>
+            <a href="tarihce.html" class="active">Tarihçe</a>
+            <a href="wiki.html">Wiki</a>
+        </div>
+    </nav>
+    
+    <div class="sayfa-duzeni">
+        <aside class="sidebar">
+            <h3>Bölümler</h3>
+            <ul id="tarihce-menu">
+                <!-- JS ile otomatik dolacak -->
+            </ul>
+        </aside>
+        
+        <main class="metin" id="md-icerik">
+            <!-- Metinler alt alta buraya yüklenecek -->
+        </main>
+    </div>
+
+    <script>
+        // Eklenecek md dosyalarını ve menü isimlerini buraya sırasıyla gir
+        const bolumler = [
+            { id: "bolum-1", dosya: "current_galaxy_state.md", isim: "Galaksinin Kısa Tarihi" },
+            { id: "bolum-2", dosya: "ikinci-bolum.md", isim: "Anahtar Çatışması" },
+            { id: "bolum-3", dosya: "ucuncu-bolum.md", isim: "İkilerin Anlaşması" }
+        ];
+
+        async function sayfalariYukle() {
+            const menu = document.getElementById('tarihce-menu');
+            const icerik = document.getElementById('md-icerik');
+
+            for (const bolum of bolumler) {
+                menu.innerHTML += `<li><a href="#${bolum.id}" id="link-${bolum.id}">${bolum.isim}</a></li>`;
+                
+                try {
+                    let yanit = await fetch(bolum.dosya);
+                    let metin = yanit.ok ? await yanit.text() : `<p>Burası şimdilik boş, hala üstüne düşünüyoruz, umarız retcona gerek kalmaz.</p>`;
+                    
+                    // Obsidian linklerini Markdown linkine çevir
+                    metin = metin.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
+                        let parcalar = icerik.split('|');
+                        let hedef = parcalar[0]; 
+                        let gorunenAd = parcalar.length > 1 ? parcalar[1] : parcalar[0]; 
+                        let urlFormat = encodeURIComponent(hedef.toLowerCase().trim().replace(/\s+/g, '-'));
+                        return `[${gorunenAd}](/wiki?madde=${urlFormat})`;
+                    });
+
+                    // Çevrilmiş metni HTML'e dönüştür ve ekrana bas
+                    icerik.innerHTML += `<div id="${bolum.id}" class="okuma-bolumu">${marked.parse(metin)}</div>`;
+                } catch (hata) {
+                    console.error("Yükleme hatası:", hata);
+                }
+            }
+            scrollTakip();
+        }
+
+        // Ekranda görünen bölümü yan menüde işaretle
+        function scrollTakip() {
+            const okumaBolumleri = document.querySelectorAll('.okuma-bolumu');
+            const ayarlar = { 
+                root: document.getElementById('md-icerik'), 
+                rootMargin: '0px 0px -50% 0px', 
+                threshold: 0.1 
+            };
+
+            const gozlemleyici = new IntersectionObserver((girdiler) => {
+                girdiler.forEach(girdi => {
+                    if (girdi.isIntersecting) {
+                        document.querySelectorAll('#tarihce-menu a').forEach(a => a.classList.remove('aktif-yan'));
+                        document.getElementById('link-' + girdi.target.id).classList.add('aktif-yan');
+                    }
+                });
+            }, ayarlar);
+
+            okumaBolumleri.forEach(bolum => gozlemleyici.observe(bolum));
+        }
+
+        window.onload = sayfalariYukle;
+    </script>
+</body>
+</html>

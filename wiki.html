@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Wiki - Kurgusal Evren</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-alani">
+            <img src="img/galaxy.svg" alt="Galaksi Logosu">
+            <h2>Bilinen Galaksi</h2>
+        </div>
+        <div class="links">
+            <a href="index.html">Yıldız Haritası</a>
+            <a href="tarihce.html">Tarihçe</a>
+            <a href="wiki.html" class="active">Wiki</a>
+        </div>
+    </nav>
+    
+    <div class="sayfa-duzeni">
+        <aside class="sidebar">
+            <h3>Wiki Dizini</h3>
+            <input type="text" id="wiki-arama" placeholder="Madde ara..." style="width: 100%; padding: 8px; margin-bottom: 20px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px;">
+            
+            <h4 style="color: #666; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px;">Son Eklenenler</h4>
+            <ul id="son-eklenenler-listesi" style="list-style: none; padding: 0;">
+                <!-- Buraya son eklenen maddeler dinamik gelecek -->
+                <li style="margin-bottom: 8px;"><a href="/wiki?madde=penton" style="color: #4da6ff;">Penton</a></li>
+                <li style="margin-bottom: 8px;"><a href="/wiki?madde=doka-bildirisi" style="color: #4da6ff;">Doka Bildirisi</a></li>
+            </ul>
+        </aside>
+
+        <main class="metin" id="wiki-icerik">
+            <!-- Wiki metni veya boşluk mesajı buraya yüklenecek -->
+        </main>
+    </div>
+
+    <script>
+        async function wikiMaddeYukle() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const madde = urlParams.get('madde'); 
+            const icerikAlani = document.getElementById('wiki-icerik');
+
+            if (madde) {
+                try {
+                    // İleride klasöre geçtiğinde burayı güncelleyeceğiz
+                    let yanit = await fetch(`${madde}.md`);
+                    let metin = yanit.ok ? await yanit.text() : `<p>Burası şimdilik boş, hala üstüne düşünüyoruz, umarız retcona gerek kalmaz.</p>`;
+                    
+                    metin = metin.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
+                        let parcalar = icerik.split('|');
+                        let hedef = parcalar[0]; 
+                        let gorunenAd = parcalar.length > 1 ? parcalar[1] : parcalar[0]; 
+                        let urlFormat = encodeURIComponent(hedef.toLowerCase().trim().replace(/\s+/g, '-'));
+                        return `[${gorunenAd}](/wiki?madde=${urlFormat})`;
+                    });
+
+                    icerikAlani.innerHTML = `<div class="okuma-bolumu">${marked.parse(metin)}</div>`;
+                } catch (hata) {
+                    icerikAlani.innerHTML = `<div class="okuma-bolumu"><p>Burası şimdilik boş, hala üstüne düşünüyoruz, umarız retcona gerek kalmaz.</p></div>`;
+                }
+            } else {
+                icerikAlani.innerHTML = `<div class="okuma-bolumu" style="max-width: 1000px;">
+                    <h1>Wiki</h1>
+                    <p>Evrene ait karakterler, yerler ve terimler veritabanı.</p>
+                    <div class="wiki-kategoriler">
+                        <div class="kategori-kutu"><h2>Gök Cisimleri</h2></div>
+                        <div class="kategori-kutu"><h2>Şehirler</h2></div>
+                        <div class="kategori-kutu"><h2>Karakterler</h2></div>
+                        <div class="kategori-kutu"><h2>Teknoloji</h2></div>
+                        <div class="kategori-kutu"><h2>Doğa</h2></div>
+                        <div class="kategori-kutu"><h2>Devlet, Bölge ve Fraksiyonlar</h2></div>
+                    </div>
+                </div>`;
+            }
+        }
+
+        window.onload = wikiMaddeYukle;
+    </script>
+</body>
+</html>
