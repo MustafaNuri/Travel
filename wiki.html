@@ -16,7 +16,7 @@
             <a href="roman.html">Roman</a>
             <a href="index.html">Yıldız Haritası</a>
             <a href="tarihce.html">Tarihçe</a>
-            <a href="wiki.html">Wiki</a>
+            <a href="wiki.html" class="active">Wiki</a>
         </div>
     </nav>
     
@@ -36,7 +36,7 @@
         </main>
     </div>
 
-    <script>
+<script>
         async function sonEklenenleriDoldur() {
             try {
                 let yanit = await fetch('site-veri.json');
@@ -60,45 +60,37 @@
 
             if (madde) {
                 try {
-                    let yanit = await fetch(`${madde}.md`);
-                    let metin = yanit.ok ? await yanit.text() : `<p>Burası şimdilik boş, hala üstüne düşünüyoruz, umarız retcona gerek kalmaz.</p>`;
+                    let yanit = await fetch(`wiki/Teknoloji/${madde}.md`);
+                    let metin = yanit.ok ? await yanit.text() : `<p>Bu madde henüz bu dizinde bulunmuyor.</p>`;
                     
+                    // Obsidian linklerini çalıştırır
                     metin = metin.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
                         let parcalar = icerik.split('|');
                         let hedef = parcalar[0]; 
                         let gorunenAd = parcalar.length > 1 ? parcalar[1] : parcalar[0]; 
-                        let urlFormat = encodeURIComponent(hedef.toLowerCase().trim().replace(/\s+/g, '-'));
+                        let urlFormat = hedef.replace(/\s+/g, '_');
                         return `[${gorunenAd}](wiki.html?madde=${urlFormat})`;
                     });
 
                     icerikAlani.innerHTML = `<div class="okuma-bolumu">${marked.parse(metin)}</div>`;
                 } catch (hata) {
-                    icerikAlani.innerHTML = `<div class="okuma-bolumu"><p>Burası şimdilik boş, hala üstüne düşünüyoruz, umarız retcona gerek kalmaz.</p></div>`;
+                    icerikAlani.innerHTML = `<div class="okuma-bolumu"><p>Madde yüklenirken bir hata oluştu.</p></div>`;
                 }
             } else {
                 icerikAlani.innerHTML = `<div class="okuma-bolumu" style="max-width: 1000px;">
                     <h1>Wiki</h1>
                     <p>Evrene ait karakterler, yerler ve terimler veritabanı.</p>
                     <div class="wiki-kategoriler">
-                        <div class="kategori-kutu"><h2>Gök Cisimleri</h2></div>
-                        <div class="kategori-kutu"><h2>Şehirler</h2></div>
-                        <div class="kategori-kutu"><h2>Karakterler</h2></div>
-                        <div class="kategori-kutu"><h2>Teknoloji</h2></div>
-                        <div class="kategori-kutu"><h2>Doğa</h2></div>
-                        <div class="kategori-kutu"><h2>Devlet, Bölge ve Fraksiyonlar</h2></div>
+                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Gok_Cisimleri_Listesi'"><h2>Gök Cisimleri</h2></div>
+                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Sehirler_Listesi'"><h2>Şehirler</h2></div>
+                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Karakterler_Listesi'"><h2>Karakterler</h2></div>
+                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Teknoloji_Listesi'"><h2>Teknoloji</h2></div>
+                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Doga_Listesi'"><h2>Doğa</h2></div>
+                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Fraksiyonlar_Listesi'"><h2>Devlet ve Fraksiyonlar</h2></div>
                     </div>
                 </div>`;
             }
         }
-
-        document.getElementById('wiki-icerik').addEventListener('click', (e) => {
-            const kutu = e.target.closest('.kategori-kutu');
-            if (kutu) {
-                let baslik = kutu.querySelector('h2').textContent;
-                let urlFormat = encodeURIComponent(baslik.toLowerCase().trim().replace(/\s+/g, '-'));
-                window.location.href = `wiki.html?madde=${urlFormat}`;
-            }
-        });
 
         window.onload = wikiMaddeYukle;
     </script>
