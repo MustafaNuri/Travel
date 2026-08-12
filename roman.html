@@ -58,7 +58,7 @@
                         return `[${gorunenAd}](wiki.html?madde=${urlFormat})`;
                     });
 
-                    const htmlIcerik = marked.parse(metin);
+                    const htmlIcerik = marked.parse(metin, {breaks: true});
                     icerik.innerHTML += `
                         <details id="${bolum.id}" class="roman-bolumu">
                             <summary>

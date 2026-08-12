@@ -72,7 +72,7 @@
                         return `[${gorunenAd}](wiki.html?madde=${urlFormat})`;
                     });
 
-                    icerikAlani.innerHTML = `<div class="okuma-bolumu">${marked.parse(metin)}</div>`;
+                    icerikAlani.innerHTML = `<div class="okuma-bolumu">${marked.parse(metin, { breaks: true })}</div>`;
                 } catch (hata) {
                     icerikAlani.innerHTML = `<div class="okuma-bolumu"><p>Madde yüklenirken bir hata oluştu.</p></div>`;
                 }

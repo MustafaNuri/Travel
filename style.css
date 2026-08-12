@@ -259,3 +259,9 @@ body.arkaplanli {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+/* wiki ve metin alanlarındaki paragraf boşluklarını artırır */
+.okuma-bolumu p {
+    margin-bottom: 1.5em; /* Paragraflar arasına belirgin boşluk koyar */
+    white-space: pre-wrap; /* Bu özellik, Markdown'daki satır sonlarını korur */
+}
