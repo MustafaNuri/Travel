@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Tarihçe - The Travel</title>
+    <title>Roman - The Travel</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
@@ -23,25 +23,24 @@
     <div class="sayfa-duzeni">
         <aside class="sidebar">
             <h3>Bölümler</h3>
-            <ul id="tarihce-menu">
+            <ul id="roman-menu">
                 <!-- JS ile otomatik dolacak -->
             </ul>
         </aside>
         
         <main class="metin" id="md-icerik">
-            <!-- Bölümler JS ile buraya gelecek -->
+            <!-- Akordiyon yapısı alt alta buraya yüklenecek -->
         </main>
     </div>
 
     <script>
         const bolumler = [
-            { id: "bolum-1", dosya: "tarihce/current_galaxy_state.md", isim: "Galaksinin Kısa Tarihi" },
-            { id: "bolum-2", dosya: "tarihce/ikinci-bolum.md", isim: "Anahtar Çatışması" },
-            { id: "bolum-3", dosya: "tarihce/ucuncu-bolum.md", isim: "İkilerin Anlaşması" }
+            { id: "bolum-1", dosya: "roman/(1) Başlangıç (Tolya).md", isim: "Kısım 1: Başlangıç", pov: "Tolya" },
+            { id: "bolum-2", dosya: "roman/(2) Aforoz (Kina).md", isim: "Kısım 2: Aforoz", pov: "Kina" }
         ];
 
         async function sayfalariYukle() {
-            const menu = document.getElementById('tarihce-menu');
+            const menu = document.getElementById('roman-menu');
             const icerik = document.getElementById('md-icerik');
 
             for (const bolum of bolumler) {
@@ -49,24 +48,25 @@
                 
                 try {
                     let yanit = await fetch(bolum.dosya);
-                    let metin = yanit.ok ? await yanit.text() : `<p>Burası şimdilik boş.</p>`;
+                    let metin = yanit.ok ? await yanit.text() : `<p>Bu bölüm henüz yazılmadı.</p>`;
                     
                     metin = metin.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
                         let parcalar = icerik.split('|');
                         let hedef = parcalar[0]; 
                         let gorunenAd = parcalar.length > 1 ? parcalar[1] : parcalar[0]; 
                         let urlFormat = encodeURIComponent(hedef.toLowerCase().trim().replace(/\s+/g, '-'));
-                        // /wiki yerine /wiki.html yapıyoruz ki tarayıcı doğrudan dosyayı bulabilsin:
                         return `[${gorunenAd}](wiki.html?madde=${urlFormat})`;
                     });
 
                     const htmlIcerik = marked.parse(metin);
-
                     icerik.innerHTML += `
-                        <div id="${bolum.id}" class="okuma-bolumu roman-detay">
-                            <h2 class="baslik-kisim">${bolum.isim}</h2>
-                            ${htmlIcerik}
-                        </div>`;
+                        <details id="${bolum.id}" class="roman-bolumu">
+                            <summary>
+                                <span class="baslik-kisim">${bolum.isim}</span> 
+                                <span class="pov-isim">${bolum.pov}</span>
+                            </summary>
+                            <div class="roman-detay">${htmlIcerik}</div>
+                        </details>`;
                 } catch (hata) {
                     console.error("Yükleme hatası:", hata);
                 }
@@ -75,7 +75,7 @@
         }
 
         function scrollTakip() {
-            const okumaBolumleri = document.querySelectorAll('.okuma-bolumu');
+            const okumaBolumleri = document.querySelectorAll('.roman-bolumu');
             const ayarlar = { 
                 root: document.getElementById('md-icerik'), 
                 rootMargin: '-20% 0px -70% 0px', 
@@ -85,7 +85,7 @@
             const gozlemleyici = new IntersectionObserver((girdiler) => {
                 girdiler.forEach(girdi => {
                     if (girdi.isIntersecting) {
-                        document.querySelectorAll('#tarihce-menu a').forEach(a => a.classList.remove('aktif-yan'));
+                        document.querySelectorAll('#roman-menu a').forEach(a => a.classList.remove('aktif-yan'));
                         const aktifLink = document.getElementById('link-' + girdi.target.id);
                         if(aktifLink) aktifLink.classList.add('aktif-yan');
                     }

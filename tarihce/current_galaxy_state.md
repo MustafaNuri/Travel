@@ -1,5 +1,3 @@
-## Galaksinin Kısa Tarihi
-
 Yıl 2298, İnsanlık 2100 lü yıllarda uzay ulaşımı konusunda 2 büyük atılım gerçekleştirmişti.
 Birincisi yıldızlar içerisinde gezegenler arasındaki ulaşımı günlere düşüren antimadde itki sistemleri, ikincisi ise yıldızlararasındaki ulaşımlarını birinci atılımdaki itki sistemlerini de kullanarak sağlayacakları mini solucan deliklerinin oluşturulabilmesine dayanan ulaşım yöntemidir ki buna da latincede solucan kelimesinden esinlenerek [[Vermis Geçitleri]] denmiştir. Bu iki gelişme sayesinde insanlık yine 2100'lü yıllarda ekosistemi bozulan ve insan yaşamına elverişi giderek azalan [[Dünya]]'dan ayrılmış, çevre yıldızlarda yapıltıkları koloni faaliyetleri ile artık eski evini neredeyse unutmuş durumdadır. 
 

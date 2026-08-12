@@ -63,7 +63,7 @@ async function evreniYukle() {
             const p = document.createElement('div');
             p.textContent = sistem.isim;
             p.style.color = 'white';
-            p.style.fontFamily = 'sans-serif';
+            p.style.fontFamily = "'Oxanium', sans-serif"; 
             p.style.fontSize = '11px';
             p.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
             p.style.padding = '2px 6px';
@@ -143,7 +143,7 @@ async function evreniYukle() {
                     const lp = document.createElement('div');
                     lp.textContent = `${mesafe.toFixed(2)} ly`;
                     lp.style.color = '#aaaaaa';
-                    lp.style.fontFamily = 'sans-serif';
+                    lp.style.fontFamily = "'Oxanium', sans-serif";
                     lp.style.fontSize = '9px';
                     lp.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
                     lp.style.padding = '1px 4px';

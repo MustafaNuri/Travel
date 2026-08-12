@@ -1,8 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&family=Offside&family=Oxanium:wght@400;700&display=swap');
+
+#icerik-alani {
+    width: 100vw;
+    height: calc(100vh - 60px);
+    position: absolute;
+    top: 60px;
+    left: 0;
+    overflow: hidden;
+}
+
+#harita-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
 body {
     margin: 0;
-    font-family: sans-serif;
+    font-family: 'Oxanium', sans-serif;
     background-color: #000;
     color: #eee;
+}
+
+/* Arka Plan Görseli ve Karartma Katmanı */
+body.arkaplanli {
+    background: linear-gradient(rgba(7, 9, 15, 0.7), rgba(7, 9, 15, 0.7)), url('img/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 
 .navbar {
@@ -20,27 +47,21 @@ body {
     text-decoration: none;
     margin-left: 20px;
     font-size: 14px;
+    font-family: 'Oxanium', sans-serif;
 }
 
-.links a:hover {
+.links a:hover,
+.links a.active {
     color: #fff;
-}
-
-#icerik-alani {
-    height: calc(100vh - 60px);
-    width: 100%;
-}
-
-#harita-frame {
-    width: 100%;
-    height: 100%;
-    border: none;
+    font-weight: bold;
 }
 
 .logo-alani {
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
+    color: #fff;
 }
 
 .logo-alani img {
@@ -50,11 +71,7 @@ body {
 
 .logo-alani h2 {
     margin: 0;
-}
-
-.links a.active {
-    font-weight: bold;
-    color: #fff;
+    font-family: 'Oxanium', sans-serif;
 }
 
 .sayfa-duzeni {
@@ -64,7 +81,7 @@ body {
 
 .sidebar {
     width: 250px;
-    background-color: #1a1a1a;
+    background-color: rgba(26, 26, 26, 0.9);
     padding: 20px;
     border-right: 1px solid #333;
     overflow-y: auto;
@@ -75,6 +92,7 @@ body {
     color: #ddd;
     border-bottom: 1px solid #444;
     padding-bottom: 10px;
+    font-family: 'Oxanium', sans-serif;
 }
 
 .sidebar ul {
@@ -87,6 +105,7 @@ body {
 }
 
 .sidebar ul li a {
+    font-family: 'Oxanium', sans-serif;
     color: #aaa;
     text-decoration: none;
     display: block;
@@ -98,79 +117,145 @@ body {
     font-weight: bold;
 }
 
-#md-icerik {
-    scroll-behavior: smooth; /* Tıklayınca yumuşak kaydırma */
-}
-
 .metin {
     padding: 40px 0;
-    flex: 1; /* Yan menüden kalan tüm boşluğu kaplar */
-    width: 100%; /* Çerçevenin en sağa kadar uzanmasını garantiler */
-    overflow-y: auto; /* Scrollbar'ı bu geniş çerçevenin en sağına yerleştirir */
+    flex: 1;
+    width: 100%;
+    overflow-y: auto;
     line-height: 1.6;
 }
 
+/* Tarihçe ve Genel Okuma Alanları İçin Kutular */
 .okuma-bolumu {
-    max-width: 800px; /* Genişliği sadece metin bazında kısıtlar */
-    margin: 0 auto 80px auto; /* Metni o devasa çerçevenin tam ortasına hizalar */
-    padding: 0 20px;
-    min-height: 50vh;
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    padding: 25px;
+    background-color: rgba(20, 25, 35, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-family: 'Offside', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
 }
 
-/* Scrollbar Tasarımı (Karanlık Tema) */
-::-webkit-scrollbar {
-    width: 12px;
+/* Roman Bölümleri İçin Kutular */
+.roman-bolumu {
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    background-color: rgba(20, 25, 35, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
 }
 
-::-webkit-scrollbar-track {
-    background: #000; /* Scrollbar arka planı */
+.roman-detay {
+    padding: 20px;
+    font-family: 'Offside', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #e0e0e0;
+    border-top: 1px solid #333;
 }
 
-::-webkit-scrollbar-thumb {
-    background: #333; /* Kaydırma çubuğunun rengi */
-    border-radius: 6px;
-    border: 3px solid #000; /* Çubuğun etrafında ince bir boşluk yaratır */
+.roman-bolumu summary {
+    background-color: rgba(26, 26, 26, 0.9);
+    color: #fff;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 8px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
+/* Başlık ve Metin Fontları */
+.baslik-kisim, .okuma-bolumu h1, .okuma-bolumu h2, .okuma-bolumu h3 {
+    font-family: 'Offside', sans-serif;
+    color: #fff;
 }
 
-.okuma-bolumu a {
-    color: #4da6ff; 
+.baslik-kisim {
+    font-size: 1.4rem;
+    margin-right: 15px;
+}
+
+.pov-isim {
+    font-family: 'Oxanium', sans-serif;
+    font-size: 1.4rem;
+    color: #aaa;
+    font-weight: bold;
+}
+
+.roman-detay em {
+    font-family: 'Indie Flower', cursive;
+    font-style: normal;
+    color: #888;
+    display: block;
+    margin-top: 20px;
+}
+
+/* Wiki Kategori Kutuları */
+.wiki-kategoriler {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+    max-width: 1000px;
+}
+
+.kategori-kutu {
+    background-color: rgba(17, 17, 17, 0.8);
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kategori-kutu h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #ddd;
+    line-height: 1.2;
+    font-family: 'Offside', sans-serif;
+}
+
+.kategori-kutu:hover {
+    border-color: #4da6ff;
+    background-color: rgba(26, 26, 26, 0.9);
+    transform: scale(1.02);
+}
+
+/* Bağlantı Renkleri ve Hover Efektleri */
+.okuma-bolumu a, .roman-detay a {
+    color: #FFD700; 
     text-decoration: none;
-    border-bottom: 1px solid #4da6ff; 
     transition: all 0.2s ease-in-out;
 }
 
-.okuma-bolumu a:hover {
+.okuma-bolumu a:hover, .roman-detay a:hover {
     color: #fff;
     border-bottom: 1px solid #fff;
     background-color: rgba(77, 166, 255, 0.1); 
 }
 
-.wiki-kategoriler {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 40px;
+/* Scrollbar Tasarımı */
+::-webkit-scrollbar {
+    width: 12px;
 }
 
-.kategori-kutu {
-    background-color: #111;
-    border: 1px solid #333;
-    padding: 30px 20px;
-    border-radius: 8px;
-    text-align: center;
-    transition: border-color 0.2s;
+::-webkit-scrollbar-track {
+    background: #000;
 }
 
-.kategori-kutu:hover {
-    border-color: #4da6ff;
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 6px;
+    border: 3px solid #000;
 }
 
-.kategori-kutu h2 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: #ddd;
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
