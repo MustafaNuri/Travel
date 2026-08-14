@@ -1,4 +1,4 @@
-<small>*L0WS - feelings*</small>  asdasdasdadas deneme 12
+<small>*L0WS - feelings*</small>
 
 Uzay gemisinin [[Antimadde Motoru|antimadde motorları]] gücünü artırırken, [[Tolya Gökçe|Tolya]]'nın uyku kapsülünün minik penceresinden uzaklaşmakta oldukları [[Venno]] gezegeni ve kırmızı halkaları görünüyordu. Kapsülü oldukça küçüktü, klasik bir [[Pulsar Koloni Devleti|Pulsar]] Taşıma Aracıydı bu. [[Yıldız Ateşeliği|Ateşelik]]'te üretilen geniş, görkemli ulaşım araçları gibi kocaman odalara sahip değildi. Bir köşesinde minikçe bir yatak, başucu eşyalarını koyabileceği komodinden bozma bir çekmece vardı. Bunların karşısında da bütün eşyalarının ancak sığacağı ufak geminin metal gövdesine gömme bir dolaba sahipti. Ayağa kalktığında odanın boş alanının neredeyse tamamını kaplıyordu. Şu an olduğu gibi yörünge çıkışı sırasında yer çekimi bulunmadığında vücudunuzu kabinin duvarlara çarpmamak için özel bir çaba göstermeniz gerekirdi. Tolya komidinin gri renkli çekmecesini çekti. Yerçekimsizlikten dağılan eşyaları arasından "[[Mobifon]]"unu çıkardı. Ekranda birkaç dokunuş yaptı ve sesli bir video oynamaya başladı.
 
