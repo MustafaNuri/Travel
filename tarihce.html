@@ -51,12 +51,15 @@
                     let yanit = await fetch(bolum.dosya);
                     let metin = yanit.ok ? await yanit.text() : `<p>Burası şimdilik boş.</p>`;
                     
+                    // Obsidian linklerini çalıştıran bloğu bununla değiştir:
                     metin = metin.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
                         let parcalar = icerik.split('|');
-                        let hedef = parcalar[0]; 
-                        let gorunenAd = parcalar.length > 1 ? parcalar[1] : parcalar[0]; 
-                        let urlFormat = encodeURIComponent(hedef.toLowerCase().trim().replace(/\s+/g, '-'));
-                        // /wiki yerine /wiki.html yapıyoruz ki tarayıcı doğrudan dosyayı bulabilsin:
+                        let hedef = parcalar[0].trim(); // Boşlukları temizle
+                        let gorunenAd = parcalar.length > 1 ? parcalar[1].trim() : hedef; 
+                        
+                        // URL formatı için boşlukları her zaman '_' yap (dosya isminle uyumlu)
+                        let urlFormat = hedef.replace(/\s+/g, '_'); 
+                        
                         return `[${gorunenAd}](wiki.html?madde=${urlFormat})`;
                     });
 

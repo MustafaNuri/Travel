@@ -66,9 +66,12 @@
                     // Obsidian linklerini çalıştırır
                     metin = metin.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
                         let parcalar = icerik.split('|');
-                        let hedef = parcalar[0]; 
-                        let gorunenAd = parcalar.length > 1 ? parcalar[1] : parcalar[0]; 
-                        let urlFormat = hedef.replace(/\s+/g, '_');
+                        let hedef = parcalar[0].trim(); // Boşlukları temizle
+                        let gorunenAd = parcalar.length > 1 ? parcalar[1].trim() : hedef; 
+                        
+                        // URL formatı için boşlukları her zaman '_' yap (dosya isminle uyumlu)
+                        let urlFormat = hedef.replace(/\s+/g, '_'); 
+                        
                         return `[${gorunenAd}](wiki.html?madde=${urlFormat})`;
                     });
 
