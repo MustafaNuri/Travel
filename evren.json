@@ -149,9 +149,9 @@
         "isim": "Eminence",
         "x": -5.8, "y": 5.89, "z": -1.5,
         "devlet": "Yildiz Ateseligi",
-        "tip": "M",
+        "tip": "K",
         "renk": "#ff9944",
-        "gezegenler": []
+        "gezegenler": ["Eminence - I", "Gaida", "Eminence - III", "Eminence - IV", "Eminence - V"]
         },
         {
         "isim": "Wolf 359",

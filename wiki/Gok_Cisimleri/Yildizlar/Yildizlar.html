@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Yıldızlar - The Travel</title>
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="arkaplanli">
+    <nav class="navbar">
+        <a href="../../../index.html" class="logo-alani" style="text-decoration: none; display: flex; align-items: center; gap: 10px; color: #fff;">
+            <img src="../../../img/galaxy.svg" alt="Galaksi Logosu">
+            <h2 style="color: inherit; margin: 0;">Bilinen Galaksi</h2>
+        </a>
+        <div class="links">
+            <a href="../../../roman.html">Roman</a>
+            <a href="../../../index.html">Yıldız Haritası</a>
+            <a href="../../../tarihce.html">Tarihçe</a>
+            <a href="../../../wiki.html" class="active">Wiki</a>
+        </div>
+    </nav>
+    
+    <div class="sayfa-duzeni">
+        <aside class="sidebar">
+            <h3>Wiki Dizini</h3>
+            <a href="../gok_cisimleri.html" style="color: #4da6ff; text-decoration: none;">&larr; Gök Cisimleri'ne Dön</a>
+        </aside>
+
+        <main class="metin" id="wiki-icerik">
+            <div class="okuma-bolumu wiki-genis">
+                <h1>Yıldızlar</h1>
+                <p>Galaksideki bilinen yıldız sistemlerinin bölgelere göre listesi.</p>
+                <div id="yildiz-bolgeleri">
+                    <!-- JS ile bölgelere ayrılmış listeler buraya gelecek -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+<script>
+        async function yildizlariYukle() {
+            try {
+                const yanit = await fetch('../../../evren.json');
+                const veri = await yanit.json();
+                const kapsayici = document.getElementById('yildiz-bolgeleri');
+                
+                const bolgeler = {};
+                const bagimsizBaslik = "Bağımsız / Dış Sistemler";
+
+                // Yıldızları devletlerine göre grupla
+                veri.sistemler.forEach(sistem => {
+                    const bolgeAdi = sistem.devlet ? sistem.devlet : bagimsizBaslik;
+                    if (!bolgeler[bolgeAdi]) {
+                        bolgeler[bolgeAdi] = [];
+                    }
+                    bolgeler[bolgeAdi].push(sistem);
+                });
+
+                // Önce normal devletleri, en son bağımsızları sırala
+                let siraliBolgeler = Object.keys(bolgeler).filter(b => b !== bagimsizBaslik);
+                if (bolgeler[bagimsizBaslik]) {
+                    siraliBolgeler.push(bagimsizBaslik);
+                }
+
+                // Gruplanan yıldızları HTML olarak oluştur
+                let htmlIcerik = '';
+                siraliBolgeler.forEach(bolge => {
+                    htmlIcerik += `<h2 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 10px; font-family: 'Offside', sans-serif; color: #fff;">${bolge}</h2>`;
+                    htmlIcerik += `<div class="wiki-kategoriler" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">`;
+                    
+                    bolgeler[bolge].forEach(sistem => {
+                        const urlFormat = sistem.isim.replace(/\s+/g, '_');
+                        const link = `../../../wiki.html?madde=${urlFormat}&kategori=Gok_Cisimleri/Yildizlar`;
+                        
+                        htmlIcerik += `
+                            <div class="kategori-kutu" style="height: 60px;" onclick="window.location.href='${link}'">
+                                <h2 style="font-size: 1rem;">${sistem.isim}</h2>
+                            </div>`;
+                    });
+                    
+                    htmlIcerik += `</div>`;
+                });
+                
+                kapsayici.innerHTML = htmlIcerik;
+                
+            } catch (hata) {
+                console.error("Yıldızlar yüklenemedi:", hata);
+            }
+        }
+        window.onload = yildizlariYukle;
+    </script>
+</body>
+</html>

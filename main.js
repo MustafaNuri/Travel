@@ -71,6 +71,14 @@ async function evreniYukle() {
             p.style.border = '1px solid rgba(255, 255, 255, 0.2)';
             p.style.visibility = 'hidden';
 
+            // Label (etiket) için tıklama ayarları
+            p.style.pointerEvents = 'auto'; 
+            p.style.cursor = 'pointer';
+
+            p.onclick = () => {
+                const urlFormat = sistem.isim.replace(/\s+/g, '_');
+                window.parent.location.href = `wiki.html?kategori=Gok_Cisimleri/Yildizlar&madde=${urlFormat}`;
+            };
             const c2d = new CSS2DObject(p);
             c2d.position.set(0, 0.3, 0);
             yildiz.add(c2d);

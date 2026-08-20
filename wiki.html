@@ -56,35 +56,79 @@
             
             const urlParams = new URLSearchParams(window.location.search);
             const madde = urlParams.get('madde'); 
+            const kategori = urlParams.get('kategori') || 'Teknoloji'; 
             const icerikAlani = document.getElementById('wiki-icerik');
 
             if (madde) {
                 try {
-                    let yanit = await fetch(`wiki/Teknoloji/${madde}.md`);
+                    let yanit = await fetch(`wiki/${kategori}/${madde}.md`);
                     let metin = yanit.ok ? await yanit.text() : `<p>Bu madde henüz bu dizinde bulunmuyor.</p>`;
                     
-                    // Obsidian linklerini çalıştırır
-                    metin = metin.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
+                    let htmlIcerik = marked.parse(metin, { breaks: true });
+                    
+                    htmlIcerik = htmlIcerik.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
                         let parcalar = icerik.split('|');
-                        let hedef = parcalar[0].trim(); // Boşlukları temizle
+                        let hedef = parcalar[0].trim(); 
                         let gorunenAd = parcalar.length > 1 ? parcalar[1].trim() : hedef; 
-                        
-                        // URL formatı için boşlukları her zaman '_' yap (dosya isminle uyumlu)
                         let urlFormat = hedef.replace(/\s+/g, '_'); 
-                        
-                        return `[${gorunenAd}](wiki.html?madde=${urlFormat})`;
+                        return `<a href="wiki.html?madde=${urlFormat}&kategori=${kategori}">${gorunenAd}</a>`;
                     });
 
-                    icerikAlani.innerHTML = `<div class="okuma-bolumu">${marked.parse(metin, { breaks: true })}</div>`;
+                    // JSON'dan Otomatik Bilgi Kutusu Oluşturma
+                    let infoboxHtml = '';
+                    if (kategori === 'Gok_Cisimleri/Yildizlar') {
+                        try {
+                            const evrenYanit = await fetch('evren.json');
+                            const evrenVeri = await evrenYanit.json();
+                            
+                            const arananIsim = madde.replace(/_/g, ' '); 
+                            const sistem = evrenVeri.sistemler.find(s => s.isim.toLowerCase() === arananIsim.toLowerCase());
+                            
+                            if (sistem) {
+                                let devletHtml = "Bağımsız / Dış Sistemler";
+                                if (sistem.devlet) {
+                                    let devletUrl = sistem.devlet.replace(/\s+/g, '_');
+                                    devletHtml = `<a href="wiki.html?madde=${devletUrl}&kategori=Fraksiyonlar_Listesi">${sistem.devlet}</a>`;
+                                }
+                                
+                                const gezegenSayisi = sistem.gezegenler ? sistem.gezegenler.length : 0;
+                                
+                                infoboxHtml = `
+                                <div class="infobox">
+                                    <h3>${sistem.isim}</h3>
+                                    <div class="infobox-satir">
+                                        <span class="infobox-etiket">Bağlılık</span>
+                                        <span class="infobox-deger">${devletHtml}</span>
+                                    </div>
+                                    <div class="infobox-satir">
+                                        <span class="infobox-etiket">Yıldız Sınıfı</span>
+                                        <span class="infobox-deger">${sistem.tip || 'Bilinmiyor'}</span>
+                                    </div>
+                                    <div class="infobox-satir">
+                                        <span class="infobox-etiket">Koordinatlar</span>
+                                        <span class="infobox-deger">X: ${sistem.x} | Y: ${sistem.y} | Z: ${sistem.z}</span>
+                                    </div>
+                                    <div class="infobox-satir">
+                                        <span class="infobox-etiket">Gezegen Sayısı</span>
+                                        <span class="infobox-deger">${gezegenSayisi}</span>
+                                    </div>
+                                </div>`;
+                            }
+                        } catch (e) {
+                            console.error("JSON verisi okunamadı:", e);
+                        }
+                    }
+
+                    icerikAlani.innerHTML = `<div class="okuma-bolumu wiki-genis">${infoboxHtml}${htmlIcerik}</div>`;
                 } catch (hata) {
                     icerikAlani.innerHTML = `<div class="okuma-bolumu"><p>Madde yüklenirken bir hata oluştu.</p></div>`;
                 }
             } else {
-                icerikAlani.innerHTML = `<div class="okuma-bolumu" style="max-width: 1000px;">
+                icerikAlani.innerHTML = `<div class="okuma-bolumu wiki-genis" style="max-width: 1000px;">
                     <h1>Wiki</h1>
                     <p>Evrene ait karakterler, yerler ve terimler veritabanı.</p>
                     <div class="wiki-kategoriler">
-                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Gok_Cisimleri_Listesi'"><h2>Gök Cisimleri</h2></div>
+                        <div class="kategori-kutu" onclick="window.location.href='wiki/Gok_Cisimleri/gok_cisimleri.html'"><h2>Gök Cisimleri</h2></div>
                         <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Sehirler_Listesi'"><h2>Şehirler</h2></div>
                         <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Karakterler_Listesi'"><h2>Karakterler</h2></div>
                         <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Teknoloji_Listesi'"><h2>Teknoloji</h2></div>
