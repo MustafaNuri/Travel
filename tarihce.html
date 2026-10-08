@@ -5,6 +5,7 @@
     <title>Tarihçe - The Travel</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="wiki-link.js"></script>
 </head>
 <body class="arkaplanli">
     <nav class="navbar">
@@ -43,6 +44,7 @@
         async function sayfalariYukle() {
             const menu = document.getElementById('tarihce-menu');
             const icerik = document.getElementById('md-icerik');
+            await WikiLink.yukle();   // hangi maddelerin yazıldığını öğren
 
             for (const bolum of bolumler) {
                 menu.innerHTML += `<li><a href="#${bolum.id}" id="link-${bolum.id}">${bolum.isim}</a></li>`;
@@ -51,17 +53,8 @@
                     let yanit = await fetch(bolum.dosya);
                     let metin = yanit.ok ? await yanit.text() : `<p>Burası şimdilik boş.</p>`;
                     
-                    // Obsidian linklerini çalıştıran bloğu bununla değiştir:
-                    metin = metin.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
-                        let parcalar = icerik.split('|');
-                        let hedef = parcalar[0].trim(); // Boşlukları temizle
-                        let gorunenAd = parcalar.length > 1 ? parcalar[1].trim() : hedef; 
-                        
-                        // URL formatı için boşlukları her zaman '_' yap (dosya isminle uyumlu)
-                        let urlFormat = hedef.replace(/\s+/g, '_'); 
-                        
-                        return `[${gorunenAd}](wiki.html?madde=${urlFormat})`;
-                    });
+                    // Obsidian linkleri: yazılmış maddeye link, yazılmamışa noktalı altı çizili yazı (wiki-link.js)
+                    metin = WikiLink.cevir(metin);
 
                     const htmlIcerik = marked.parse(metin, {breaks: true});
 

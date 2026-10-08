@@ -5,6 +5,7 @@
     <title>Roman - The Travel</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="wiki-link.js"></script>
 </head>
 <body class="arkaplanli">
     <nav class="navbar">
@@ -34,34 +35,39 @@
     </div>
 
     <script>
-        const bolumler = [
-            { id: "bolum-1", dosya: "roman/(1) Başlangıç (Tolya).md", isim: "Kısım 1: Başlangıç", pov: "Tolya" },
-            { id: "bolum-2", dosya: "roman/(2) Aforoz (Kina).md", isim: "Kısım 2: Aforoz", pov: "Kina" },
-            { id: "bolum-3", dosya: "roman/(3) Teklif ve Fırsat (Heng).md", isim: "Kısım 3: Teklif ve Fırsat", pov: "Heng" }
-        ];
+        // Yayınlanan bölümler wiki-dizin.json'dan gelir (senkron betiği, Obsidian'da "yayinla: true" olan bölümleri yazar)
+        async function bolumleriGetir() {
+            try {
+                const yanit = await fetch('wiki-dizin.json');
+                const dizin = yanit.ok ? await yanit.json() : {};
+                return (dizin.bolumler || []).map(b => ({
+                    id: `bolum-${b.no}`,
+                    dosya: b.dosya || `roman/(${b.no}) ${b.ad} (${b.pov}).md`,
+                    isim: `Kısım ${b.no}: ${b.ad}`,
+                    pov: b.pov
+                }));
+            } catch (hata) {
+                console.error("Bölüm listesi okunamadı:", hata);
+                return [];
+            }
+        }
 
         async function sayfalariYukle() {
             const menu = document.getElementById('roman-menu');
             const icerik = document.getElementById('md-icerik');
+            await WikiLink.yukle();   // hangi maddelerin yazıldığını öğren
+            const bolumler = await bolumleriGetir();
 
             for (const bolum of bolumler) {
                 menu.innerHTML += `<li><a href="#${bolum.id}" id="link-${bolum.id}">${bolum.isim}</a></li>`;
                 
                 try {
-                    let yanit = await fetch(bolum.dosya);
+                    let yanit = await fetch(encodeURI(bolum.dosya));
                     let metin = yanit.ok ? await yanit.text() : `<p>Bu bölüm henüz yazılmadı.</p>`;
+                    metin = metin.replace(/^\ufeff?---\r?\n[\s\S]*?\r?\n---[ \t]*\r?\n/, "");   // olası üst bilgiyi gizle
                     
-                    // Obsidian linklerini çalıştıran bloğu bununla değiştir:
-                    metin = metin.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
-                        let parcalar = icerik.split('|');
-                        let hedef = parcalar[0].trim(); // Boşlukları temizle
-                        let gorunenAd = parcalar.length > 1 ? parcalar[1].trim() : hedef; 
-                        
-                        // URL formatı için boşlukları her zaman '_' yap (dosya isminle uyumlu)
-                        let urlFormat = hedef.replace(/\s+/g, '_'); 
-                        
-                        return `[${gorunenAd}](wiki.html?madde=${urlFormat})`;
-                    });
+                    // Obsidian linkleri: yazılmış maddeye link, yazılmamışa noktalı altı çizili yazı (wiki-link.js)
+                    metin = WikiLink.cevir(metin);
 
                     const htmlIcerik = marked.parse(metin, {breaks: true});
                     icerik.innerHTML += `

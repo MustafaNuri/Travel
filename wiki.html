@@ -2,11 +2,13 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Wiki - The Travel</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="wiki.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 </head>
-<body class="arkaplanli">
+<body class="arkaplanli wiki-sayfasi">
     <nav class="navbar">
         <a href="index.html" class="logo-alani" style="text-decoration: none; display: flex; align-items: center; gap: 10px; color: #fff;">
             <img src="img/galaxy.svg" alt="Galaksi Logosu">
@@ -19,127 +21,39 @@
             <a href="wiki.html" class="active">Wiki</a>
         </div>
     </nav>
-    
+
     <div class="sayfa-duzeni">
-        <aside class="sidebar">
+        <aside class="sidebar wiki-yan">
             <h3>Wiki Dizini</h3>
-            <input type="text" id="wiki-arama" placeholder="Madde ara..." style="width: 100%; padding: 8px; margin-bottom: 20px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px;">
-            
-            <h4 style="color: #666; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px;">Son Eklenenler</h4>
-            <ul id="son-eklenenler-listesi" style="list-style: none; padding: 0;">
-                <!-- JSON'dan dinamik dolacak -->
-            </ul>
+
+            <div class="yan-blok arama-blok">
+                <input type="search" id="wiki-arama" placeholder="Madde ara..." autocomplete="off">
+                <ul id="arama-sonuc" class="arama-sonuc" hidden></ul>
+            </div>
+
+            <div class="yan-blok ilerleme-blok">
+                <label for="okur-bolum" class="yan-etiket">Okuduğum son bölüm</label>
+                <select id="okur-bolum"></select>
+                <p class="yan-not">Bu bölümden sonrasına ait bilgiler bulanık gösterilir.</p>
+            </div>
+
+            <div class="yan-blok">
+                <h4 class="yan-etiket">Kategoriler</h4>
+                <ul class="yan-liste" id="kategori-listesi"></ul>
+            </div>
+
+            <div class="yan-blok">
+                <h4 class="yan-etiket">Son Eklenenler</h4>
+                <ul id="son-eklenenler-listesi" class="yan-liste"></ul>
+            </div>
         </aside>
 
         <main class="metin" id="wiki-icerik">
-            <!-- İçerik buraya yüklenecek -->
+            <p class="yukleniyor">Yükleniyor…</p>
         </main>
     </div>
 
-<script>
-        async function sonEklenenleriDoldur() {
-            try {
-                let yanit = await fetch('site-veri.json');
-                let veri = await yanit.json();
-                const liste = document.getElementById('son-eklenenler-listesi');
-                liste.innerHTML = '';
-                veri.sonEklenenler.forEach(item => {
-                    liste.innerHTML += `<li style="margin-bottom: 8px;"><a href="${item.url}" style="color: #4da6ff; text-decoration: none;">${item.baslik}</a></li>`;
-                });
-            } catch (hata) {
-                console.error("Son eklenenler yüklenemedi:", hata);
-            }
-        }
-
-        async function wikiMaddeYukle() {
-            sonEklenenleriDoldur();
-            
-            const urlParams = new URLSearchParams(window.location.search);
-            const madde = urlParams.get('madde'); 
-            const kategori = urlParams.get('kategori') || 'Teknoloji'; 
-            const icerikAlani = document.getElementById('wiki-icerik');
-
-            if (madde) {
-                try {
-                    let yanit = await fetch(`wiki/${kategori}/${madde}.md`);
-                    let metin = yanit.ok ? await yanit.text() : `<p>Bu madde henüz bu dizinde bulunmuyor.</p>`;
-                    
-                    let htmlIcerik = marked.parse(metin, { breaks: true });
-                    
-                    htmlIcerik = htmlIcerik.replace(/\[\[(.*?)\]\]/g, (match, icerik) => {
-                        let parcalar = icerik.split('|');
-                        let hedef = parcalar[0].trim(); 
-                        let gorunenAd = parcalar.length > 1 ? parcalar[1].trim() : hedef; 
-                        let urlFormat = hedef.replace(/\s+/g, '_'); 
-                        return `<a href="wiki.html?madde=${urlFormat}&kategori=${kategori}">${gorunenAd}</a>`;
-                    });
-
-                    // JSON'dan Otomatik Bilgi Kutusu Oluşturma
-                    let infoboxHtml = '';
-                    if (kategori === 'Gok_Cisimleri/Yildizlar') {
-                        try {
-                            const evrenYanit = await fetch('evren.json');
-                            const evrenVeri = await evrenYanit.json();
-                            
-                            const arananIsim = madde.replace(/_/g, ' '); 
-                            const sistem = evrenVeri.sistemler.find(s => s.isim.toLowerCase() === arananIsim.toLowerCase());
-                            
-                            if (sistem) {
-                                let devletHtml = "Bağımsız / Dış Sistemler";
-                                if (sistem.devlet) {
-                                    let devletUrl = sistem.devlet.replace(/\s+/g, '_');
-                                    devletHtml = `<a href="wiki.html?madde=${devletUrl}&kategori=Fraksiyonlar_Listesi">${sistem.devlet}</a>`;
-                                }
-                                
-                                const gezegenSayisi = sistem.gezegenler ? sistem.gezegenler.length : 0;
-                                
-                                infoboxHtml = `
-                                <div class="infobox">
-                                    <h3>${sistem.isim}</h3>
-                                    <div class="infobox-satir">
-                                        <span class="infobox-etiket">Bağlılık</span>
-                                        <span class="infobox-deger">${devletHtml}</span>
-                                    </div>
-                                    <div class="infobox-satir">
-                                        <span class="infobox-etiket">Yıldız Sınıfı</span>
-                                        <span class="infobox-deger">${sistem.tip || 'Bilinmiyor'}</span>
-                                    </div>
-                                    <div class="infobox-satir">
-                                        <span class="infobox-etiket">Koordinatlar</span>
-                                        <span class="infobox-deger">X: ${sistem.x} | Y: ${sistem.y} | Z: ${sistem.z}</span>
-                                    </div>
-                                    <div class="infobox-satir">
-                                        <span class="infobox-etiket">Gezegen Sayısı</span>
-                                        <span class="infobox-deger">${gezegenSayisi}</span>
-                                    </div>
-                                </div>`;
-                            }
-                        } catch (e) {
-                            console.error("JSON verisi okunamadı:", e);
-                        }
-                    }
-
-                    icerikAlani.innerHTML = `<div class="okuma-bolumu wiki-genis">${infoboxHtml}${htmlIcerik}</div>`;
-                } catch (hata) {
-                    icerikAlani.innerHTML = `<div class="okuma-bolumu"><p>Madde yüklenirken bir hata oluştu.</p></div>`;
-                }
-            } else {
-                icerikAlani.innerHTML = `<div class="okuma-bolumu wiki-genis" style="max-width: 1000px;">
-                    <h1>Wiki</h1>
-                    <p>Evrene ait karakterler, yerler ve terimler veritabanı.</p>
-                    <div class="wiki-kategoriler">
-                        <div class="kategori-kutu" onclick="window.location.href='wiki/Gok_Cisimleri/gok_cisimleri.html'"><h2>Gök Cisimleri</h2></div>
-                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Sehirler_Listesi'"><h2>Şehirler</h2></div>
-                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Karakterler_Listesi'"><h2>Karakterler</h2></div>
-                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Teknoloji_Listesi'"><h2>Teknoloji</h2></div>
-                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Doga_Listesi'"><h2>Doğa</h2></div>
-                        <div class="kategori-kutu" onclick="window.location.href='wiki.html?madde=Fraksiyonlar_Listesi'"><h2>Devlet ve Fraksiyonlar</h2></div>
-                    </div>
-                </div>`;
-            }
-        }
-
-        window.onload = wikiMaddeYukle;
-    </script>
+    <script src="wiki-link.js"></script>
+    <script src="wiki.js"></script>
 </body>
 </html>

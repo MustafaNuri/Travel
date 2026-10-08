@@ -92,7 +92,8 @@ async function evreniYukle() {
             "Pulsar Koloni Devleti": 0x006600,
             "Pulsar Genişleme Bölgesi": 0x00FF00,
             "Daytona Rejimi": 0xff9900,
-            "Üç Yıldız Şehirleri": 0x9933ff
+            "Üç Yıldız Şehirleri": 0x9933ff,
+            "Dış Yerleşimler": 0xfff3a0
         };
 
         devletHaritasi.forEach((vektorler, devletAdi) => {

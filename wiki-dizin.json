@@ -1,0 +1,183 @@
+{
+  "bolumler": [
+    {
+      "no": 1,
+      "ad": "Başlangıç",
+      "pov": "Tolya",
+      "dosya": "roman/(1) Başlangıç (Tolya).md",
+      "imza": "bb1cff3dbad4",
+      "ilk_yayin": "2026-08-21",
+      "son_degisim": "2026-10-08"
+    },
+    {
+      "no": 2,
+      "ad": "Aforoz",
+      "pov": "Kina",
+      "dosya": "roman/(2) Aforoz (Kina).md",
+      "imza": "4630d365418e",
+      "ilk_yayin": "2026-08-27",
+      "son_degisim": "2026-10-08"
+    },
+    {
+      "no": 3,
+      "ad": "Teklif ve Fırsat",
+      "pov": "Heng",
+      "dosya": "roman/(3) Teklif ve Fırsat (Heng).md",
+      "imza": "5edbdc61cb32",
+      "ilk_yayin": "2026-08-19",
+      "son_degisim": "2026-08-19"
+    }
+  ],
+  "son_eklenenler": [
+    {
+      "baslik": "Venno",
+      "url": "wiki.html?madde=Venno",
+      "tur": "uydu",
+      "tarih": "2026-10-08",
+      "durum": "eklendi"
+    },
+    {
+      "baslik": "Antimadde Motoru",
+      "url": "wiki.html?madde=Antimadde_Motoru",
+      "tur": "teknoloji",
+      "tarih": "2026-10-08",
+      "durum": "eklendi"
+    },
+    {
+      "baslik": "Eminence",
+      "url": "wiki.html?madde=Eminence",
+      "tur": "yildiz",
+      "tarih": "2026-10-08",
+      "durum": "eklendi"
+    },
+    {
+      "baslik": "Tau Ceti",
+      "url": "wiki.html?madde=Tau_Ceti",
+      "tur": "yildiz",
+      "tarih": "2026-10-08",
+      "durum": "eklendi"
+    },
+    {
+      "baslik": "Kısım 1: Başlangıç",
+      "url": "roman.html#bolum-1",
+      "tur": "bolum",
+      "tarih": "2026-10-08",
+      "durum": "guncellendi"
+    },
+    {
+      "baslik": "Kısım 2: Aforoz",
+      "url": "roman.html#bolum-2",
+      "tur": "bolum",
+      "tarih": "2026-10-08",
+      "durum": "guncellendi"
+    },
+    {
+      "baslik": "Kısım 3: Teklif ve Fırsat",
+      "url": "roman.html#bolum-3",
+      "tur": "bolum",
+      "tarih": "2026-08-19",
+      "durum": "eklendi"
+    }
+  ],
+  "maddeler": [
+    {
+      "ad": "Antimadde Motoru",
+      "slug": "Antimadde_Motoru",
+      "kategori": "Teknoloji",
+      "dosya": "wiki/Teknoloji/Antimadde_Motoru.md",
+      "tur": "teknoloji",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {},
+      "baglantilar": [
+        "Dünya",
+        "Sol",
+        "Vermis Geçitleri",
+        "Daytona Rejimi",
+        "Pulsar Koloni Devleti",
+        "Merkez Cumhuriyeti",
+        "Yıldız Ateşeliği",
+        "Sintonia"
+      ],
+      "ozet": "Bu motor bulunduktan sonra her ne kadar antimadde lojistiği 2000'li yıllara göre kolaylaştırılmış olsa da antimadde yakıtı bugün (2298) bile yıldızlararası savaşın ve ticaretin en önemli unsurlarından biri olarak göze ça…",
+      "imza": "00a373bef6db",
+      "ilk_yayin": "2026-10-08",
+      "son_degisim": "2026-10-08"
+    },
+    {
+      "ad": "Eminence",
+      "slug": "Eminence",
+      "kategori": "Gok_Cisimleri/Yildizlar",
+      "dosya": "wiki/Gok_Cisimleri/Yildizlar/Eminence.md",
+      "tur": "yildiz",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "baskent": "[[Gaida]]",
+        "yasam_barindiran": [
+          "[[Gaida]]",
+          "[[Venno]]"
+        ]
+      },
+      "baglantilar": [
+        "Gaida",
+        "Venno"
+      ],
+      "ozet": "Eminence, Yıldız Ateşeliği sınırları içerisinde üzerinde yaşam barındıran gezegenlere sahip tek yıldız sistemidir. Bu gezegenler, Gaida gezegeni ve Venno uydusudur. Gaida Ateşelik'in başkentliğini yapmaktadır.",
+      "imza": "7ab91475d677",
+      "ilk_yayin": "2026-10-08",
+      "son_degisim": "2026-10-08"
+    },
+    {
+      "ad": "Tau Ceti",
+      "slug": "Tau_Ceti",
+      "kategori": "Gok_Cisimleri/Yildizlar",
+      "dosya": "wiki/Gok_Cisimleri/Yildizlar/Tau_Ceti.md",
+      "tur": "yildiz",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {},
+      "baglantilar": [],
+      "ozet": "Cumhuriyet'in Başkenti.",
+      "imza": "16427ba4d004",
+      "ilk_yayin": "2026-10-08",
+      "son_degisim": "2026-10-08"
+    },
+    {
+      "ad": "Venno",
+      "slug": "Venno",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Venno.md",
+      "tur": "uydu",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Eminence]]",
+        "gezegen": "[[Eminence - IV]]",
+        "renk": null,
+        "boyut": null,
+        "gravity": "0.65 g"
+      },
+      "baglantilar": [
+        "Eminence",
+        "Yıldız Ateşeliği",
+        "Venno Üniversitesi",
+        "Bilinen Galaksi",
+        "Eminence - IV"
+      ],
+      "ozet": "Eminence yıldızının 4. gaz devi gezegeninin bir uydusu olan Venno, Yıldız Ateşeliği sınırları içerisinde bulunmaktadır. Uydu üzerinde çeşitli irili ufaklı yerleşimler olsa da asıl ününü barındırdığı Venno Üniversitesi'ne…",
+      "imza": "55a30f1af217",
+      "ilk_yayin": "2026-10-08",
+      "son_degisim": "2026-10-08"
+    }
+  ],
+  "yonetilen_dosyalar": [
+    "roman/(1) Başlangıç (Tolya).md",
+    "roman/(2) Aforoz (Kina).md",
+    "roman/(3) Teklif ve Fırsat (Heng).md",
+    "wiki/Gok_Cisimleri/Gezegenler/Venno.md",
+    "wiki/Gok_Cisimleri/Yildizlar/Eminence.md",
+    "wiki/Gok_Cisimleri/Yildizlar/Tau_Ceti.md",
+    "wiki/Teknoloji/Antimadde_Motoru.md"
+  ]
+}

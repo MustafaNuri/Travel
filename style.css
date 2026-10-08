@@ -314,3 +314,10 @@ body.arkaplanli {
 .okuma-bolumu.wiki-genis .wiki-kategoriler {
     max-width: 100%;
 }
+
+/* Henüz yazılmamış wiki maddeleri (Roman, Tarihçe, Wiki): link rengiyle aynı, altı noktalı çizgi */
+.wl-yok {
+    color: #FFD700;
+    border-bottom: 1px dotted rgba(255, 215, 0, 0.7);
+    cursor: help;
+}
