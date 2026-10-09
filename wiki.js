@@ -229,11 +229,7 @@ function aramaKur() {
 const tarihYaz = (t) => { try { return new Date(t + "T00:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "short" }); } catch { return t; } };
 
 async function sonEklenenler() {
-    let akis = DIZIN.son_eklenenler;
-    if (!akis) {   // betik henüz yeni sürümle çalışmadıysa eski elle yazılan listeye dön
-        const veri = await getirJson("site-veri.json", { sonEklenenler: [] });
-        akis = (veri.sonEklenenler || []).map(i => ({ baslik: i.baslik, url: i.url }));
-    }
+    const akis = DIZIN.son_eklenenler || [];   // senkron betiği üretir
     $("#son-eklenenler-listesi").innerHTML = akis.map(i => {
         const tur = i.tur === "bolum" ? "Bölüm" : (TUR_AD[i.tur] || "");
         const meta = i.tarih ? `<span class="akis-meta">${esc(tur)}${tur ? " · " : ""}<span class="akis-durum ${i.durum}">${i.durum === "guncellendi" ? "güncellendi" : "eklendi"}</span> · ${esc(tarihYaz(i.tarih))}</span>` : "";
