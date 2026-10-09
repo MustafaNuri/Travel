@@ -104,8 +104,8 @@
       "durum": "eklendi"
     },
     {
-      "baslik": "Ay",
-      "url": "wiki.html?madde=Ay",
+      "baslik": "Luna",
+      "url": "wiki.html?madde=Luna",
       "tur": "uydu",
       "tarih": "2026-10-09",
       "durum": "eklendi"
@@ -157,30 +157,6 @@
       "imza": "00a373bef6db",
       "ilk_yayin": "2026-10-08",
       "son_degisim": "2026-10-08"
-    },
-    {
-      "ad": "Ay",
-      "slug": "Ay",
-      "kategori": "Gok_Cisimleri/Gezegenler",
-      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Ay.md",
-      "tur": "uydu",
-      "ilk_bolum": null,
-      "aliases": [],
-      "ozellikler": {
-        "sistem": "[[Sol]]",
-        "gezegen": "[[Dünya]]",
-        "renk": null,
-        "boyut": null
-      },
-      "baglantilar": [
-        "Sol",
-        "Dünya"
-      ],
-      "ozet": "",
-      "klasor": null,
-      "imza": "956446e463a6",
-      "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
     },
     {
       "ad": "Daytona Rejimi",
@@ -254,6 +230,30 @@
       "imza": "7ab91475d677",
       "ilk_yayin": "2026-10-08",
       "son_degisim": "2026-10-08"
+    },
+    {
+      "ad": "Luna",
+      "slug": "Luna",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Luna.md",
+      "tur": "uydu",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Sol]]",
+        "gezegen": "[[Dünya]]",
+        "renk": null,
+        "boyut": null
+      },
+      "baglantilar": [
+        "Sol",
+        "Dünya"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "956446e463a6",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
     },
     {
       "ad": "Merkez Cumhuriyeti",
@@ -427,7 +427,7 @@
     "wiki/Fraksiyonlar/Pulsar_Koloni_Devleti.md",
     "wiki/Fraksiyonlar/Yıldız_Ateşeliği.md",
     "wiki/Fraksiyonlar/Üç_Yıldız_Şehirleri.md",
-    "wiki/Gok_Cisimleri/Gezegenler/Ay.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Luna.md",
     "wiki/Gok_Cisimleri/Gezegenler/Venno.md",
     "wiki/Gok_Cisimleri/Yildizlar/Eminence.md",
     "wiki/Gok_Cisimleri/Yildizlar/Tau_Ceti.md",
