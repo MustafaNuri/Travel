@@ -4,15 +4,7 @@
    ========================================================= */
 
 // ---- Ayarlar ---------------------------------------------------------------
-const DEVLET_RENK = {             // main.js ile aynı renkler
-    "Merkez Cumhuriyeti": "#00aaff",
-    "Yildiz Ateseligi": "#ff3344",
-    "Pulsar Koloni Devleti": "#00aa44",
-    "Pulsar Genişleme Bölgesi": "#00ff00",
-    "Daytona Rejimi": "#ff9900",
-    "Üç Yıldız Şehirleri": "#9933ff",
-    "Dış Yerleşimler": "#fff3a0"
-};
+const DEVLET_RENK = {};          // evren.json'daki "devletler" bölümünden doldurulur (harita ile ortak)
 const ETIKET = {                  // frontmatter anahtarı -> bilgi kutusu etiketi
     baskent: "Başkent", yasam_barindiran: "Yaşam barındıran", nufus: "Nüfus",
     dogum: "Doğum", olum: "Ölüm", sistem: "Sistem", gravity: "Yerçekimi", yercekimi: "Yerçekimi",
@@ -285,9 +277,23 @@ function sinifHtml(tip) {
     return `${esc(tip)}${ad ? ` <span style="color:var(--soluk)">· ${ad}</span>` : ""}`;
 }
 
+/** Çift sistemin eşi (evren.json "ciftler"), yoksa null */
+function esi(s) {
+    const c = (EVREN.ciftler || []).find(c => c.includes(s.isim));
+    return c ? c.find(x => x !== s.isim) : null;
+}
+
+/** Vermis bağlantıları; çift sistemde eşlerin bağlantıları ortaktır */
 function komsular(s) {
-    return EVREN.baglantilar.filter(b => b.yildiz1 === s.isim || b.yildiz2 === s.isim)
-        .map(b => b.yildiz1 === s.isim ? b.yildiz2 : b.yildiz1);
+    const es = esi(s), adlar = new Set();
+    for (const b of EVREN.baglantilar) {
+        for (const ad of [s.isim, es]) {
+            if (ad && b.yildiz1 === ad) adlar.add(b.yildiz2);
+            if (ad && b.yildiz2 === ad) adlar.add(b.yildiz1);
+        }
+    }
+    adlar.delete(s.isim); if (es) adlar.delete(es);
+    return [...adlar];
 }
 
 function miniHarita(s) {
@@ -567,6 +573,7 @@ function yildizKutusu(s, m) {
         ["Bağlılık", devletHtml(s.devlet)],
         ["Yıldız sınıfı", sinifHtml(s.tip)],
         ["Sol'a uzaklık", s.isim === "Sol" ? "—" : `${uzaklik.toFixed(2)} ışık yılı`],
+        ...(esi(s) ? [["Eş yıldız", linkHtml(esi(s), esi(s))]] : []),
         ...ekAlanlar(oz)
     ]);
     const k = komsular(s);
@@ -773,6 +780,7 @@ function anaSayfa() {
         getirJson("evren.json", { sistemler: [], baglantilar: [] })
     ]);
     DIZIN.bolumler ||= []; DIZIN.maddeler ||= []; EVREN.baglantilar ||= [];
+    Object.assign(DEVLET_RENK, EVREN.devletler || {});
     veriyiHazirla();
     ilerlemeSeciciKur();
     aramaKur();

@@ -1,4 +1,19 @@
 {
+    "devletler": {
+        "Merkez Cumhuriyeti": "#00aaff",
+        "Yildiz Ateseligi": "#ff3344",
+        "Pulsar Koloni Devleti": "#00aa44",
+        "Pulsar Genişleme Bölgesi": "#00ff00",
+        "Daytona Rejimi": "#ff9900",
+        "Üç Yıldız Şehirleri": "#9933ff",
+        "Dış Yerleşimler": "#fff3a0"
+    },
+    "ciftler": [
+        ["Alfa Centauri", "Proxima Centauri"],
+        ["Alice", "Bob"],
+        ["Alfa Kefir", "Gama Kefir"],
+        ["Alfa Zemura", "Beta Zemura"]
+    ],
     "sistemler": [
         {
         "isim": "Sol",
@@ -15,7 +30,7 @@
         "devlet": "Merkez Cumhuriyeti",
         "tip": "G/K",
         "renk": "#ffaa44",
-        "gezegenler": [""]
+        "gezegenler": []
         },
         {
         "isim": "Proxima Centauri",
@@ -23,7 +38,7 @@
         "devlet": "Merkez Cumhuriyeti",
         "tip": "M",
         "renk": "#ff4422",
-        "gezegenler": [""]
+        "gezegenler": []
         },
         {
         "isim": "Schrodinger",
@@ -242,7 +257,7 @@
         "gezegenler": []
         },
         {
-        "isim": "1",
+        "isim": "Doka",
         "x": -12.3, "y": -2, "z": 0,
         "devlet": "Pulsar Genişleme Bölgesi",
         "tip": "M",
@@ -250,7 +265,7 @@
         "gezegenler": []
         },
         {
-        "isim": "2",
+        "isim": "Protela",
         "x": -16.3, "y": -1, "z": -1.9,
         "devlet": "Pulsar Genişleme Bölgesi",
         "tip": "M",
@@ -258,7 +273,7 @@
         "gezegenler": []
         },
         {
-        "isim": "3",
+        "isim": "Seira",
         "x": -9, "y": -5, "z": -1,
         "devlet": "Pulsar Genişleme Bölgesi",
         "tip": "M",
@@ -483,14 +498,17 @@
         { "yildiz1": "Ipsiya", "yildiz2": "Nehir"},
         { "yildiz1": "Ipsiya", "yildiz2": "Nira"},
         { "yildiz1": "Gliese 581", "yildiz2": "Nira"},
-        { "yildiz1": "Gama Kefir", "yildiz2": "Selton"},
         { "yildiz1": "Banshe", "yildiz2": "Nira"},
         { "yildiz1": "Banshe", "yildiz2": "Zanovia"},
         { "yildiz1": "Demina", "yildiz2": "Onlan"},
         { "yildiz1": "Nira", "yildiz2": "Kvaria"},
         { "yildiz1": "Kvaria", "yildiz2": "Demina"},
         { "yildiz1": "Kvaria", "yildiz2": "Onlan"},
-        { "yildiz1": "Sintonia", "yildiz2": "Demina"}
+        { "yildiz1": "Sintonia", "yildiz2": "Demina"},
+        { "yildiz1": "Doka", "yildiz2": "Beta Zemura"},
+        { "yildiz1": "Protela", "yildiz2": "Doka"},
+        { "yildiz1": "Seira", "yildiz2": "Gama Kefir"},
+        { "yildiz1": "Seira", "yildiz2": "Beta Zemura"}
 
     ]
 }
