@@ -26,6 +26,135 @@ izgara.material.transparent = true;
 izgara.material.opacity = 0.6;
 scene.add(izgara);
 
+// ---- Arka plan: uzak yıldızlar ve Samanyolu --------------------------------------
+// Harita koordinatları ekvatoral sistemde (Sirius, Procyon, Tau Ceti gerçek yerlerinde),
+// bu yüzden Samanyolu bandı gökyüzündeki gerçek yönüne yerleştirilir.
+// Gökyüzü kamerayla birlikte taşınır: kaydırınca kaymaz, sadece döndürünce döner.
+const gokyuzu = new THREE.Group();
+scene.add(gokyuzu);
+(function gokyuzunuKur() {
+    const GOK_R = 900;
+    // Ekvatoral (harita) yönünü three.js eksenlerine çevir: haritada (x, y, z) -> sahnede (x, z, y)
+    const ekv = (raDer, decDer) => {
+        const a = THREE.MathUtils.degToRad(raDer), d = THREE.MathUtils.degToRad(decDer);
+        return new THREE.Vector3(Math.cos(d) * Math.cos(a), Math.sin(d), Math.cos(d) * Math.sin(a));
+    };
+    const GM = ekv(266.40499, -28.93617);   // galaksi merkezi (Yay takımyıldızı yönü)
+    const KGK = ekv(192.85948, 27.12825);   // kuzey galaktik kutup
+    // l = 90° yönü: ekvatoral sistemde KGK × GM; eksen takası (y<->z) yönü ters çevirdiği için burada GM × KGK
+    const G90 = new THREE.Vector3().crossVectors(GM, KGK).normalize();
+    const galaktikYon = (lDer, bDer) => {
+        const l = THREE.MathUtils.degToRad(lDer), b = THREE.MathUtils.degToRad(bDer);
+        return new THREE.Vector3()
+            .addScaledVector(GM, Math.cos(b) * Math.cos(l))
+            .addScaledVector(G90, Math.cos(b) * Math.sin(l))
+            .addScaledVector(KGK, Math.sin(b));
+    };
+
+    // Basit, tekrarlanabilir rastgele sayı (her açılışta aynı gökyüzü)
+    let tohum = 20260809;
+    const rnd = () => ((tohum = (tohum * 1664525 + 1013904223) >>> 0) / 4294967296);
+    const gauss = () => Math.sqrt(-2 * Math.log(rnd() + 1e-9)) * Math.cos(2 * Math.PI * rnd());
+    const RENKLER = [[0.72, 0.82, 1.0], [0.85, 0.9, 1.0], [1.0, 1.0, 1.0], [1.0, 0.95, 0.82], [1.0, 0.84, 0.66]];
+
+    // --- 1) Yıldız noktaları: her yöne dağılmış olanlar + Samanyolu boyunca yoğunlaşanlar
+    const konum = [], renk = [], boyut = [];
+    const ekle = (yon, parlaklik, b) => {
+        yon.multiplyScalar(GOK_R); konum.push(yon.x, yon.y, yon.z);
+        const r = RENKLER[Math.floor(rnd() * RENKLER.length)];
+        renk.push(r[0] * parlaklik, r[1] * parlaklik, r[2] * parlaklik);
+        boyut.push(b);
+    };
+    for (let i = 0; i < 4500; i++) {
+        const z = rnd() * 2 - 1, f = rnd() * Math.PI * 2, s = Math.sqrt(1 - z * z);
+        const p = Math.pow(rnd(), 3);                       // çoğu sönük, birkaçı parlak
+        ekle(new THREE.Vector3(s * Math.cos(f), z, s * Math.sin(f)), 0.25 + 0.6 * p, 1.2 + 1.8 * p);
+    }
+    for (let i = 0; i < 9000; i++) {
+        let l = rnd() * 360;
+        if (rnd() < 0.45) l = gauss() * 35;                 // merkeze doğru daha yoğun
+        const genislik = 4 + 5 * Math.exp(-Math.pow(l / 30, 2));
+        const p = Math.pow(rnd(), 4);
+        ekle(galaktikYon(l, gauss() * genislik), 0.18 + 0.45 * p, 1.0 + 1.4 * p);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(konum, 3));
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(renk, 3));
+    geo.setAttribute('boyut', new THREE.Float32BufferAttribute(boyut, 1));
+    const noktaMat = new THREE.ShaderMaterial({
+        uniforms: { oran: { value: renderer.getPixelRatio() } },
+        vertexShader: `attribute float boyut; varying vec3 vRenk; uniform float oran;
+            void main() { vRenk = color; gl_PointSize = boyut * oran;
+                          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+        fragmentShader: `varying vec3 vRenk;
+            void main() { float d = length(gl_PointCoord - 0.5); float a = smoothstep(0.5, 0.05, d);
+                          gl_FragColor = vec4(vRenk * a, a); }`,
+        vertexColors: true, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending
+    });
+    const noktalar = new THREE.Points(geo, noktaMat);
+    noktalar.renderOrder = -10;
+    gokyuzu.add(noktalar);
+
+    // --- 2) Samanyolu'nun puslu ışığı: galaktik koordinatlarda çizilen doku
+    const W = 1024, H = 512;
+    const tuval = document.createElement('canvas'); tuval.width = W; tuval.height = H;
+    const ctx = tuval.getContext('2d'), img = ctx.createImageData(W, H);
+    // pürüzlü görünüm için tekrarlanabilir değer gürültüsü (l yönünde sarmalı)
+    const GX = 96, GY = 48, izgaraG = Array.from({ length: GX * GY }, rnd);
+    const deger = (x, y) => {
+        const x0 = Math.floor(x), y0 = Math.floor(y), fx = x - x0, fy = y - y0;
+        const g = (i, j) => izgaraG[((j % GY + GY) % GY) * GX + ((i % GX + GX) % GX)];
+        const sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+        return (g(x0, y0) * (1 - sx) + g(x0 + 1, y0) * sx) * (1 - sy) + (g(x0, y0 + 1) * (1 - sx) + g(x0 + 1, y0 + 1) * sx) * sy;
+    };
+    const fbm = (x, y) => 0.55 * deger(x, y) + 0.3 * deger(x * 2.1, y * 2.1) + 0.15 * deger(x * 4.3, y * 4.3);
+    for (let j = 0; j < H; j++) {
+        const b = 90 - (j + 0.5) / H * 180;
+        for (let i = 0; i < W; i++) {
+            let l = (i + 0.5) / W * 360; const lf = l > 180 ? l - 360 : l;   // -180..180, 0 = merkez
+            const gx = l / 360 * GX, gy = (b + 90) / 180 * GY * 0.5;
+            const n = fbm(gx, gy), n2 = fbm(gx * 1.7 + 13, gy * 1.7 + 7);
+            const genislik = 5 + 7 * Math.exp(-Math.pow(lf / 32, 2));
+            let I = Math.exp(-Math.pow(b / genislik, 2)) * (0.45 + 0.9 * n);
+            I += 0.9 * Math.exp(-(Math.pow(lf / 16, 2) + Math.pow(b / 9, 2)));          // merkezdeki şişkinlik
+            const toz = 1 - 0.6 * Math.exp(-Math.pow(b / 2.4, 2)) * Math.exp(-Math.pow(lf / 70, 2)) * (0.4 + 0.8 * n2);
+            I = Math.max(0, I * toz);
+            const sicak = Math.exp(-Math.pow(lf / 50, 2));                                  // merkez sıcak, kenarlar mavimsi
+            const k = (j * W + i) * 4;
+            img.data[k] = 255 * Math.min(1, I * (0.72 + 0.28 * sicak));
+            img.data[k + 1] = 255 * Math.min(1, I * (0.78 + 0.12 * sicak));
+            img.data[k + 2] = 255 * Math.min(1, I * (1.0 - 0.25 * sicak));
+            img.data[k + 3] = 255;
+        }
+    }
+    ctx.putImageData(img, 0, 0);
+    const doku = new THREE.CanvasTexture(tuval);
+    doku.colorSpace = THREE.SRGBColorSpace;
+    // Dokunun her pikseli (l, b) yönüne denk gelsin diye küreyi kendimiz kuruyoruz
+    const kure = new THREE.SphereGeometry(GOK_R * 1.05, 96, 48);
+    const poz = kure.attributes.position, uv = kure.attributes.uv, v = new THREE.Vector3();
+    for (let i = 0; i < poz.count; i++) {
+        v.fromBufferAttribute(poz, i).normalize();
+        const b = Math.asin(THREE.MathUtils.clamp(v.dot(KGK), -1, 1));
+        let l = Math.atan2(v.dot(G90), v.dot(GM)); if (l < 0) l += Math.PI * 2;
+        uv.setXY(i, l / (Math.PI * 2), 0.5 + b / Math.PI);
+    }
+    // l = 0/360 dikişinde doku tersine sarmasın diye: üçgen içinde u farkı büyükse düzelt
+
+    const kopya = kure.toNonIndexed(); const uv2 = kopya.attributes.uv; const poz2 = kopya.attributes.position;
+    for (let t = 0; t < uv2.count; t += 3) {
+        const us = [uv2.getX(t), uv2.getX(t + 1), uv2.getX(t + 2)];
+        if (Math.max(...us) - Math.min(...us) > 0.5) for (let q = 0; q < 3; q++) if (us[q] < 0.5) uv2.setX(t + q, us[q] + 1);
+    }
+    doku.wrapS = THREE.RepeatWrapping;
+    const pus = new THREE.Mesh(kopya, new THREE.MeshBasicMaterial({
+        map: doku, side: THREE.BackSide, transparent: true, opacity: 0.24,
+        depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending
+    }));
+    pus.renderOrder = -11;
+    gokyuzu.add(pus);
+})();
+
 const tiklanabilirObjeler = [];   // tıklama için görünmez, biraz büyük küreler
 const labelElements = [];
 const lineElements = [];
@@ -38,6 +167,7 @@ const ESLER = new Map();       // çift sistemler: isim -> eşinin adı (evren.j
 const UYDU_NOTLARI = new Map(); // yıldız anahtarı -> [{ ad, gezegen }] (yayınlanmış uydu maddeleri)
 const MADDELER = new Map();    // anahtar -> yayınlanmış wiki maddesi (wiki-dizin.json)
 let DEVLET_RENK = {};
+let BOLGELER = {};               // bölge -> bağlı olduğu devlet (evren.json "bolgeler")
 const SINIF_AD = { O: "Mavi dev", B: "Mavi-beyaz yıldız", A: "Beyaz yıldız", F: "Sarı-beyaz yıldız", G: "Sarı cüce", K: "Turuncu cüce", M: "Kırmızı cüce" };
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -77,6 +207,7 @@ async function evreniYukle() {
         const response = await fetch('evren.json');
         const data = await response.json();
         DEVLET_RENK = data.devletler || {};
+        BOLGELER = data.bolgeler || {};
         for (const [a, b] of data.ciftler || []) { ESLER.set(a, b); ESLER.set(b, a); }
 
         // Yayınlanmış wiki maddeleri (varsa panelde özet ve linkler için)
@@ -288,6 +419,15 @@ function devletAdi(d) {
     return m && m.tur === 'devlet' ? m.ad : d;   // "Yildiz Ateseligi" -> "Yıldız Ateşeliği"
 }
 
+/** Bölgeyse bağlı olduğu devlet ve bölge etiketi: { ust, etiket }; değilse { ust: d } */
+function baglilik(d) {
+    const k = Object.keys(BOLGELER).find(x => anahtar(x) === anahtar(d));
+    if (!k) return { ust: d, etiket: '' };
+    const ust = BOLGELER[k], ilk = ust.split(' ')[0];
+    const etiket = (d.startsWith(ilk + ' ') ? d.slice(ilk.length + 1) : d).toLocaleLowerCase('tr');
+    return { ust, etiket };
+}
+
 function linkVeyaYazi(ad, gorunen = ad) {
     return MADDELER.has(anahtar(ad))
         ? `<a href="${wikiUrl(MADDELER.get(anahtar(ad)).ad)}" data-git>${esc(gorunen)}</a>`
@@ -319,9 +459,11 @@ function paneliDoldur(s) {
     const tipler = tip.split('/').map(t => t.trim()).filter(Boolean);
     const sinif = tipler.length > 1 ? 'Çoklu yıldız' : (SINIF_AD[tipler[0]?.[0]?.toUpperCase()] || '');
     const uzaklik = Math.hypot(s.x, s.y, s.z);
-    const devlet = s.devlet
-        ? `<span class="yp-nokta" style="background:${esc(DEVLET_RENK[s.devlet] || '#8b93a3')}"></span>` +
-          `<a href="${wikiUrl(devletAdi(s.devlet))}" data-git>${esc(devletAdi(s.devlet))}</a>`
+    const bag = s.devlet ? baglilik(s.devlet) : null;
+    const devlet = bag
+        ? `<span class="yp-nokta" style="background:${esc(DEVLET_RENK[bag.ust] || DEVLET_RENK[s.devlet] || '#8b93a3')}"></span>` +
+          `<a href="${wikiUrl(devletAdi(bag.ust))}" data-git>${esc(devletAdi(bag.ust))}</a>` +
+          (bag.etiket ? `<span class="yp-ebeveyn"> · ${esc(bag.etiket)}</span>` : '')
         : 'Bağımsız';
 
     const gezegenler = (s.gezegenler || []).filter(Boolean);
@@ -408,8 +550,9 @@ function aramaGoster() {
     aramaSecili = aramaSonuclari.length ? 0 : -1;
     aramaListe.innerHTML = aramaSonuclari.length
         ? aramaSonuclari.map((k, i) => {
-            const renk = DEVLET_RENK[k.devlet] || '#8b93a3';
-            const alt = k.tur === 'yıldız' ? (k.devlet ? devletAdi(k.devlet) : 'Bağımsız')
+            const bag = k.devlet ? baglilik(k.devlet) : null;
+            const renk = (bag && DEVLET_RENK[bag.ust]) || DEVLET_RENK[k.devlet] || '#8b93a3';
+            const alt = k.tur === 'yıldız' ? (bag ? devletAdi(bag.ust) + (bag.etiket ? ' · ' + bag.etiket : '') : 'Bağımsız')
                 : k.tur === 'uydu' ? `Uydu · ${k.gezegen && !k.ad.includes('(') ? k.gezegen + ' · ' : ''}${k.yildiz} sistemi`
                 : `Gezegen · ${k.yildiz} sistemi`;
             return `<li role="option" data-i="${i}" class="${i === aramaSecili ? 'secili' : ''}">` +
@@ -471,6 +614,7 @@ function animate(zaman) {
         if (k === 1) ucus = null;
     }
     controls.update();
+    gokyuzu.position.copy(camera.position);   // gökyüzü hep sonsuz uzakta dursun
 
     if (secili) {
         secimHalkasi.position.copy(secili.mesh.position);

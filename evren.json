@@ -14,6 +14,9 @@
         ["Alfa Kefir", "Gama Kefir"],
         ["Alfa Zemura", "Beta Zemura"]
     ],
+    "bolgeler": {
+        "Pulsar Genişleme Bölgesi": "Pulsar Koloni Devleti"
+    },
     "sistemler": [
         {
         "isim": "Sol",

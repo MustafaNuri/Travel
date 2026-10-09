@@ -263,11 +263,38 @@ function devletRengi(ad) {
     return k ? DEVLET_RENK[k] : null;
 }
 
+/** Bir bölgenin bağlı olduğu devlet (evren.json "bolgeler"), bölge değilse null */
+function bolgeninDevleti(d) {
+    if (!d) return null;
+    const b = EVREN.bolgeler || {};
+    const k = Object.keys(b).find(x => anahtar(x) === anahtar(d));
+    return k ? b[k] : null;
+}
+
+/** "Pulsar Genişleme Bölgesi" -> "genişleme bölgesi" (devletin adıyla başlıyorsa o kısım atılır) */
+function bolgeEtiketi(d, ust) {
+    const ilk = String(ust).split(" ")[0];
+    const ad = String(d).startsWith(ilk + " ") ? String(d).slice(ilk.length + 1) : String(d);
+    return ad.toLocaleLowerCase("tr");
+}
+
+/** Devlet adı (link); bölgeyse bağlı olduğu devlet + bölge etiketi */
+function devletLink(d) {
+    const ust = bolgeninDevleti(d);
+    return ust ? `${linkHtml(ust, ust)} <span style="color:var(--soluk)">· ${esc(bolgeEtiketi(d, ust))}</span>` : linkHtml(d, d);
+}
+
+/** Düz yazı hali (harita noktalarının ipuçları için) */
+function devletYazi(d) {
+    const ust = bolgeninDevleti(d);
+    return ust ? `${ust} · ${bolgeEtiketi(d, ust)}` : d;
+}
+
 function devletHtml(d) {
     if (!d) return "Bağımsız";
-    const renk = devletRengi(d);
+    const renk = devletRengi(bolgeninDevleti(d) || d);
     const nokta = renk ? `<span class="devlet-nokta" style="background:${renk}"></span>` : "";
-    return nokta + linkHtml(d, d);
+    return nokta + devletLink(d);
 }
 
 function sinifHtml(tip) {
@@ -314,7 +341,7 @@ function miniHarita(s) {
     for (const o of EVREN.sistemler) {
         if (!icinde(o) || o === s) continue;
         const renk = DEVLET_RENK[o.devlet] || "#bbbbbb";
-        noktalar += `<a href="${maddeUrl(o.isim)}"><title>${esc(o.isim)}${o.devlet ? " · " + esc(o.devlet) : ""}</title>` +
+        noktalar += `<a href="${maddeUrl(o.isim)}"><title>${esc(o.isim)}${o.devlet ? " · " + esc(devletYazi(o.devlet)) : ""}</title>` +
             `<circle cx="${o.x}" cy="${o.y}" r="${(komsu.has(o.isim) ? 0.4 : 0.28) * k}" fill="${renk}" fill-opacity="${komsu.has(o.isim) ? 1 : 0.6}"/></a>` +
             (komsu.has(o.isim) ? `<text x="${o.x + 0.6 * k}" y="${o.y + 0.3 * k}" font-size="${0.8 * k}" fill="#c4cad4">${esc(o.isim)}</text>` : "");
     }
@@ -488,6 +515,7 @@ function devletSistemleri(m) {
     // genişleme bölgesi: notta "genisleme_bolgesi" yazılıysa o, yoksa "Pulsar ... Genişleme Bölgesi" gibi aynı kelimeyle başlayan bölge
     const ilkKelime = anahtar(m.ad).split(" ")[0];
     const bolgeAdi = sistemAdiCoz(m.ozellikler?.genisleme_bolgesi)
+        || Object.keys(EVREN.bolgeler || {}).find(b => anahtar(EVREN.bolgeler[b]) === ak)
         || [...new Set(EVREN.sistemler.map(s => s.devlet).filter(Boolean))].find(d => anahtar(d).includes("genisleme") && anahtar(d).split(" ")[0] === ilkKelime);
     const genisleme = bolgeAdi ? EVREN.sistemler.filter(s => s.devlet && anahtar(s.devlet) === anahtar(bolgeAdi)) : [];
     return { sistemler, genisleme, bolgeAdi };
@@ -511,7 +539,7 @@ function topraklarHaritasi(m, renk, sistemler, genisleme, baskentYildiz) {
     for (const s of EVREN.sistemler) {
         const benim = uye.has(s), g = gen.has(s);
         const r = (benim ? 0.55 : 0.4) * k;
-        const ic = `<title>${esc(s.isim)}${s.devlet ? " · " + esc(s.devlet) : ""}</title><circle cx="${s.x}" cy="${s.y}" r="${r}" fill="${benim || g ? renk : "#8b93a3"}" fill-opacity="${benim ? 1 : g ? 0.55 : 0.35}"/>`;
+        const ic = `<title>${esc(s.isim)}${s.devlet ? " · " + esc(devletYazi(s.devlet)) : ""}</title><circle cx="${s.x}" cy="${s.y}" r="${r}" fill="${benim || g ? renk : "#8b93a3"}" fill-opacity="${benim ? 1 : g ? 0.55 : 0.35}"/>`;
         noktalar += `<a href="${maddeUrl(s.isim)}">${ic}</a>`;
     }
     const yildizIsaret = baskentYildiz ? `<circle cx="${baskentYildiz.x}" cy="${baskentYildiz.y}" r="${1.3 * k}" fill="none" stroke="#fff" stroke-width="${0.18 * k}"/>` : "";
@@ -636,7 +664,7 @@ function ekBolumler(m, s) {
 }
 
 function maddeCiz({ baslik, alt, liste, govdeHtml, kutu, ek }) {
-    document.title = `${baslik} - Wiki - The Travel`;
+    document.title = `${baslik} · Kırlangıç Çırak`;
     kategoriMenusu(liste);
     $("#wiki-icerik").innerHTML = `<article class="madde">
         ${kirinti(liste, baslik)}
@@ -664,7 +692,7 @@ async function maddeSayfasi(madde, kategori) {
         const [h1, govde] = basligiAyir(ham ?? "");
         const govdeHtml = govde.trim() ? mdCiz(govde) : `<p class="bos-not">Bu madde henüz yazılmadı.</p>`;
         const altParca = [TUR_AD[m.tur] || ""];
-        if (s?.devlet) altParca.push(linkHtml(s.devlet, s.devlet));
+        if (s?.devlet) altParca.push(devletLink(s.devlet));
         if (gokYildiz) altParca.push(`${linkHtml(gokYildiz.isim, gokYildiz.isim)} sistemi`);
         maddeCiz({
             baslik: s ? m.ad : (h1 || m.ad),   // yıldız sayfalarında başlık her zaman yıldızın adı
@@ -678,7 +706,7 @@ async function maddeSayfasi(madde, kategori) {
     if (s) {   // evren.json'da olan ama maddesi yazılmamış yıldız
         maddeCiz({
             baslik: s.isim, liste: "yildizlar",
-            alt: `Yıldız sistemi${s.devlet ? " · " + linkHtml(s.devlet, s.devlet) : ""}`,
+            alt: `Yıldız sistemi${s.devlet ? " · " + devletLink(s.devlet) : ""}`,
             govdeHtml: `<p class="bos-not">Bu sistem hakkında henüz bir madde yazılmadı. Haritadaki verileri sağdaki bilgi kutusunda görebilirsin.</p>`,
             kutu: yildizKutusu(s, null), ek: ekBolumler(null, s)
         });
@@ -702,7 +730,11 @@ const sistemAdiCoz = (v) => { const s = [].concat(v || [])[0]; return s ? String
 function listeKayitlari(k) {
     const L = LISTELER[k];
     if (k === "yildizlar") {
-        return EVREN.sistemler.map(s => ({ ad: s.isim, grup: s.devlet || "Bağımsız", alt: s.tip ? `${s.tip} sınıfı` : "", renk: DEVLET_RENK[s.devlet] }));
+        return EVREN.sistemler.map(s => {
+            const ust = bolgeninDevleti(s.devlet);   // bölgedeki yıldızlar bağlı oldukları devletin grubunda
+            const alt = [s.tip ? `${s.tip} sınıfı` : "", ust ? bolgeEtiketi(s.devlet, ust) : ""].filter(Boolean).join(" · ");
+            return { ad: s.isim, grup: ust || s.devlet || "Bağımsız", alt, renk: DEVLET_RENK[s.devlet] };
+        });
     }
     const kayit = new Map();
     if (L.evren) {
@@ -746,7 +778,7 @@ function listeSayisi(k) { return LISTELER[k].alt ? LISTELER[k].alt.reduce((t, a)
 
 function listeSayfasi(k) {
     const L = LISTELER[k];
-    document.title = `${L.ad} - Wiki - The Travel`;
+    document.title = `${L.ad} · Wiki · Kırlangıç Çırak`;
     kategoriMenusu(k);
     const govde = L.alt
         ? `<div class="wiki-kategoriler">${L.alt.map(a => `<a class="kategori-kutu" href="${listeUrl(a)}"><h2>${esc(LISTELER[a].ad)}<small>${listeSayisi(a)} kayıt</small></h2></a>`).join("")}</div>`

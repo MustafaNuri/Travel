@@ -2,8 +2,22 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Roman - The Travel</title>
+    <title>Roman · Kırlangıç Çırak</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+    <style>
+        /* Romanın adı: bölümlerin üstünde */
+        .roman-kapak { max-width: 800px; margin: 10px auto 44px; padding: 0 20px; text-align: center; }
+        .roman-kapak h1 {
+            margin: 0; color: #fff; font-family: 'Michroma', sans-serif; font-weight: 400;
+            font-size: clamp(26px, 4.4vw, 50px); letter-spacing: 0.04em; line-height: 1.2;
+            text-shadow: 0 0 22px rgba(77, 166, 255, 0.45);
+        }
+        .roman-kapak::after {
+            content: ""; display: block; width: 160px; height: 1px; margin: 24px auto 0;
+            background: linear-gradient(90deg, transparent, rgba(77, 166, 255, 0.85), transparent);
+        }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
     <script src="wiki-link.js"></script>
 </head>
@@ -30,6 +44,7 @@
         </aside>
         
         <main class="metin" id="md-icerik">
+            <header class="roman-kapak"><h1>Kırlangıç Çırak</h1></header>
             <!-- Akordiyon yapısı alt alta buraya yüklenecek -->
         </main>
     </div>
