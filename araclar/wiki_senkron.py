@@ -28,7 +28,17 @@ from datetime import datetime
 from pathlib import Path
 
 # ---------------------------------------------------------------- AYARLAR --
-VARSAYILAN_VAULT = r"C:\Users\musta\Documents\a\Roman"
+# Hangi bilgisayarda hangi vault kullanılacak (bilgisayar adı -> vault yolu).
+# Betik önce bu bilgisayarın adına bakar. Adı listede yoksa VAULT_ADAYLARI'na geçer;
+# orada birden fazla yol varsa yanlış kopyayı okumamak için durur ve size sorar.
+BILGISAYAR_VAULT = {
+    "NURI": r"C:\Users\musta\Documents\a\Roman",   # iş bilgisayarı
+    # "EV-BILGISAYARI-ADI": r"D:\Roman\The Travel",   # ev bilgisayarı: adını betik ilk çalışmada söyler
+}
+VAULT_ADAYLARI = [
+    r"C:\Users\musta\Documents\a\Roman",   # iş bilgisayarı
+    r"D:\Roman\The Travel",                   # ev bilgisayarı
+]
 VARSAYILAN_SITE = str(Path(__file__).resolve().parent.parent)
 
 # Vault'taki üst klasör -> sitedeki wiki kategorisi
@@ -305,12 +315,30 @@ def anahtar(ad):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--vault", default=VARSAYILAN_VAULT)
+    ap.add_argument("--vault", default=None)
     ap.add_argument("--site", default=VARSAYILAN_SITE)
     args = ap.parse_args()
-    vault, site = Path(args.vault), Path(args.site)
+    site = Path(args.site)
+    bilgisayar = (os.environ.get("COMPUTERNAME") or os.environ.get("HOSTNAME") or "").upper()
+    if args.vault:
+        vault = Path(args.vault)
+    elif bilgisayar in BILGISAYAR_VAULT:
+        vault = Path(BILGISAYAR_VAULT[bilgisayar])
+    else:
+        bulunan = [Path(a) for a in VAULT_ADAYLARI if Path(a).is_dir()]
+        if not bulunan:
+            sys.exit(f"Obsidian vault'u bulunamadı (bilgisayar: {bilgisayar}).\n"
+                     f"araclar/wiki_senkron.py içindeki BILGISAYAR_VAULT listesine şu satırı ekleyin:\n"
+                     f'    "{bilgisayar}": r"<vault yolu>",')
+        if len(bulunan) > 1:
+            sys.exit(f"Bu bilgisayarda ({bilgisayar}) birden fazla vault bulundu, hangisinin doğru olduğundan emin olamıyorum:\n"
+                     + "".join(f"    {b}\n" for b in bulunan)
+                     + f"araclar/wiki_senkron.py içindeki BILGISAYAR_VAULT listesine doğru olanı ekleyin, örneğin:\n"
+                     f'    "{bilgisayar}": r"{bulunan[-1]}",')
+        vault = bulunan[0]
     if not vault.is_dir():
         sys.exit(f"Vault bulunamadı: {vault}")
+    print(f"Bilgisayar: {bilgisayar or '?'}   Vault: {vault}\n")
 
     dizin_yolu = site / "wiki-dizin.json"
     eski_dizin = {}
@@ -373,6 +401,7 @@ def main():
             "ozellikler": fm_json,
             "baglantilar": linkleri_bul(temiz, json.dumps(fm_json, ensure_ascii=False)),
             "ozet": ozet_cikar(temiz),
+            "klasor": parcalar[-2] if len(parcalar) > 2 else None,   # örn. "Merkez Cumhuriyeti" (bağlı kurumlar için)
         }
         tarihleri_belirle(madde, eski_maddeler.get(ad, {}), yeni_imza, BUGUN)
         maddeler.append(madde)

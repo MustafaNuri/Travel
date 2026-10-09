@@ -311,3 +311,19 @@ a.kategori-kutu { text-decoration: none !important; }
     box-shadow: none;
 }
 .ib-bas:has(.ib-kure.mat) { background: none; }
+
+/* Devlet amblemi */
+.ib-amblem {
+    width: 74px; height: 74px; margin: 0 auto 12px; border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(145deg, color-mix(in srgb, var(--yildiz) 85%, #fff), color-mix(in srgb, var(--yildiz) 55%, #000));
+    border: 2px solid color-mix(in srgb, var(--yildiz) 60%, #fff);
+    box-shadow: 0 0 24px 2px color-mix(in srgb, var(--yildiz) 35%, transparent);
+    transform: rotate(45deg);
+}
+.ib-amblem span {
+    transform: rotate(-45deg);
+    font-family: 'Offside', sans-serif; font-size: 1.4rem; color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6); letter-spacing: 0.05em;
+}
+.mini-harita.topraklar { cursor: default; touch-action: auto; }

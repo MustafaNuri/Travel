@@ -19,8 +19,9 @@ const ETIKET = {                  // frontmatter anahtarı -> bilgi kutusu etike
     kurulus: "Kuruluş", kurucu: "Kurucu", lider: "Lider", meslek: "Meslek", uyruk: "Uyruk",
     bagli: "Bağlılık", baglilik: "Bağlılık", yas: "Yaş", atmosfer: "Atmosfer", iklim: "İklim",
     gelistirilme: "Geliştirilme", gelistiren: "Geliştiren", durum: "Durum", unvan: "Unvan",
-    gezegen: "Bağlı olduğu gezegen"
+    gezegen: "Bağlı olduğu gezegen", yonetim: "Yönetim biçimi", ekonomi: "Ekonomi / Ana kaynak"
 };
+const DEVLET_ALAN_SIRASI = ["baskent", "kurulus", "kurucu", "yonetim", "lider", "nufus", "ekonomi"];
 const GIZLI_ALAN = new Set(["evren_adi", "tags", "cssclasses", "resim", "alt_baslik", "renk", "boyut"]);
 const TUR_AD = {
     yildiz: "Yıldız sistemi", gezegen: "Gezegen", uydu: "Uydu", karakter: "Karakter",
@@ -266,9 +267,17 @@ function ekAlanlar(oz, haric = []) {
         .map(([k, v]) => [etiketle(k), degerHtml(v)]);
 }
 
+/** Devlet rengi: evren.json'daki yazımla (Yildiz Ateseligi) ya da nottaki yazımla (Yıldız Ateşeliği) */
+function devletRengi(ad) {
+    if (!ad) return null;
+    if (DEVLET_RENK[ad]) return DEVLET_RENK[ad];
+    const k = Object.keys(DEVLET_RENK).find(x => anahtar(x) === anahtar(ad));
+    return k ? DEVLET_RENK[k] : null;
+}
+
 function devletHtml(d) {
     if (!d) return "Bağımsız";
-    const renk = DEVLET_RENK[d];
+    const renk = devletRengi(d);
     const nokta = renk ? `<span class="devlet-nokta" style="background:${renk}"></span>` : "";
     return nokta + linkHtml(d, d);
 }
@@ -318,7 +327,7 @@ function miniHarita(s) {
 
 /** Mini haritayı sürüklenebilir yapar (sadece kaydırma, döndürme yok) */
 function miniHaritaEtkinlestir() {
-    document.querySelectorAll(".mini-harita").forEach(svg => {
+    document.querySelectorAll(".mini-harita:not(.topraklar)").forEach(svg => {
         const cx = +svg.dataset.cx, cy = +svg.dataset.cy, R = +svg.dataset.r, S = +svg.dataset.sinir;
         const dugme = svg.parentElement.querySelector(".mini-merkez");
         const sinirla = (v) => Math.max(-S, Math.min(S, v));
@@ -458,6 +467,84 @@ function sistemBolumu(s, vurgu) {
     return bolum("Sistem", sema + cip);
 }
 
+// ---- Devlet sayfaları ----------------------------------------------------------
+/** Noktaların dışbükey zarfı (3D haritadaki bölge hacminin üstten görünümü) */
+function disbukeyZarf(noktalar) {
+    const p = [...noktalar].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    if (p.length < 3) return p;
+    const capraz = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+    const alt = [], ust = [];
+    for (const q of p) { while (alt.length >= 2 && capraz(alt.at(-2), alt.at(-1), q) <= 0) alt.pop(); alt.push(q); }
+    for (const q of [...p].reverse()) { while (ust.length >= 2 && capraz(ust.at(-2), ust.at(-1), q) <= 0) ust.pop(); ust.push(q); }
+    return alt.slice(0, -1).concat(ust.slice(0, -1));
+}
+
+/** Devletin evren.json'daki sistemleri ve (varsa) genişleme bölgesi */
+function devletSistemleri(m) {
+    const ak = anahtar(m.ozellikler?.evren_adi || m.ad);
+    const sistemler = EVREN.sistemler.filter(s => s.devlet && anahtar(s.devlet) === ak);
+    // genişleme bölgesi: notta "genisleme_bolgesi" yazılıysa o, yoksa "Pulsar ... Genişleme Bölgesi" gibi aynı kelimeyle başlayan bölge
+    const ilkKelime = anahtar(m.ad).split(" ")[0];
+    const bolgeAdi = sistemAdiCoz(m.ozellikler?.genisleme_bolgesi)
+        || [...new Set(EVREN.sistemler.map(s => s.devlet).filter(Boolean))].find(d => anahtar(d).includes("genisleme") && anahtar(d).split(" ")[0] === ilkKelime);
+    const genisleme = bolgeAdi ? EVREN.sistemler.filter(s => s.devlet && anahtar(s.devlet) === anahtar(bolgeAdi)) : [];
+    return { sistemler, genisleme, bolgeAdi };
+}
+
+function topraklarHaritasi(m, renk, sistemler, genisleme, baskentYildiz) {
+    // çerçeve: bir devlete bağlı tüm yıldızlar (yerleşik galaksi); çok uzaktaki bağımsız yıldızlar çerçeveyi büyütmesin
+    const cekirdek = EVREN.sistemler.filter(s => s.devlet);
+    const xs = cekirdek.map(s => s.x), ys = cekirdek.map(s => s.y);
+    const pay = 4, x0 = Math.min(...xs) - pay, y0 = Math.min(...ys) - pay;
+    const w = Math.max(...xs) + pay - x0, h = Math.max(...ys) + pay - y0;
+    const k = Math.max(w, h) / 45;   // boyutlar haritanın genişliğine göre
+    const bolge = (liste, opak) => {
+        if (!liste.length) return "";
+        const z = disbukeyZarf(liste.map(s => [s.x, s.y]));
+        if (z.length < 3) return liste.map(s => `<circle cx="${s.x}" cy="${s.y}" r="${2.2 * k}" fill="${renk}" fill-opacity="${opak}"/>`).join("");
+        return `<polygon points="${z.map(q => q.join(",")).join(" ")}" fill="${renk}" fill-opacity="${opak}" stroke="${renk}" stroke-opacity="${opak * 2.5}" stroke-width="${0.25 * k}" stroke-linejoin="round"/>`;
+    };
+    const uye = new Set(sistemler), gen = new Set(genisleme);
+    let noktalar = "";
+    for (const s of EVREN.sistemler) {
+        const benim = uye.has(s), g = gen.has(s);
+        const r = (benim ? 0.55 : 0.4) * k;
+        const ic = `<title>${esc(s.isim)}${s.devlet ? " · " + esc(s.devlet) : ""}</title><circle cx="${s.x}" cy="${s.y}" r="${r}" fill="${benim || g ? renk : "#8b93a3"}" fill-opacity="${benim ? 1 : g ? 0.55 : 0.35}"/>`;
+        noktalar += `<a href="${maddeUrl(s.isim)}">${ic}</a>`;
+    }
+    const yildizIsaret = baskentYildiz ? `<circle cx="${baskentYildiz.x}" cy="${baskentYildiz.y}" r="${1.3 * k}" fill="none" stroke="#fff" stroke-width="${0.18 * k}"/>` : "";
+    return `<svg class="mini-harita topraklar" viewBox="${x0} ${y0} ${w} ${h}" role="img" aria-label="${esc(m.ad)} toprakları" font-family="Oxanium, sans-serif">
+        ${bolge(genisleme, 0.08)}${bolge(sistemler, 0.2)}${noktalar}${yildizIsaret}
+    </svg><p class="mini-not">Üstten görünüm · yerleşik galaksi${genisleme.length ? " · soluk bölge: genişleme alanı" : ""}${baskentYildiz ? " · halka: başkent" : ""}</p>`;
+}
+
+function devletKutusu(m) {
+    const renk = devletRengi(m.ozellikler?.evren_adi || m.ad) || "#8b93a3";
+    const oz = { ...(m.ozellikler || {}) };
+    delete oz.genisleme_bolgesi;
+    // alanları sabit sırayla göster, kalanlar sonda
+    const sirali = {};
+    DEVLET_ALAN_SIRASI.forEach(k => { if (k in oz) sirali[k] = oz[k]; });
+    Object.keys(oz).forEach(k => { if (!(k in sirali)) sirali[k] = oz[k]; });
+    const { sistemler, genisleme, bolgeAdi } = devletSistemleri(m);
+    // başkentin yıldızı: başkent bir gezegen/şehir ise onu barındıran sistem
+    const bAd = sistemAdiCoz(oz.baskent);
+    const baskentYildiz = bAd ? (EVREN.sistemler.find(s => anahtar(s.isim) === anahtar(bAd) || (s.gezegenler || []).some(g => g && anahtar(g) === anahtar(bAd)))
+        || SISTEM.get(anahtar(sistemAdiCoz(MADDE.get(anahtar(bAd))?.ozellikler?.sistem) || ""))) : null;
+    const gezegenSayisi = sistemler.reduce((t, s) => t + (s.gezegenler || []).filter(g => g && String(g).trim()).length, 0);
+    const ozet = `<p class="mini-not" style="text-align:left;margin:8px 0 6px">${sistemler.length} yıldız sistemi · ${gezegenSayisi} bilinen gezegen${genisleme.length ? ` · genişleme bölgesinde ${genisleme.length} sistem` : ""}</p>`;
+    const topraklar = sistemler.length || genisleme.length
+        ? topraklarHaritasi(m, renk, sistemler, genisleme, baskentYildiz) + ozet + cipler(sistemler.map(s => s.isim))
+          + (genisleme.length ? `<p class="mini-not" style="text-align:left;margin:10px 0 6px">${esc(bolgeAdi)}</p>${cipler(genisleme.map(s => s.isim))}` : "")
+        : `<p class="mini-not" style="text-align:left">Haritada kayıtlı toprağı yok.</p>`;
+    const kisaltma = m.ad.split(/\s+/).filter(w => w.length > 2 || /^[A-ZÇĞİÖŞÜ]/.test(w)).slice(0, 2).map(w => w[0].toLocaleUpperCase("tr")).join("");
+    return `<aside class="ib" style="--yildiz:${esc(renk)}">
+        <div class="ib-bas"><div class="ib-amblem"><span>${esc(kisaltma)}</span></div><h3>${esc(m.ad)}</h3><p>${esc(TUR_AD[m.tur] || "Devlet")}</p></div>
+        ${bolum("Genel", satirlar(ekAlanlar(sirali)))}
+        ${bolum("Topraklar", topraklar)}
+    </aside>`;
+}
+
 /** Gezegen ve uydu sayfalarının bilgi kutusu */
 function gokCismiKutusu(m, s) {
     const { renk } = gezegenGorunumu(m.ad);
@@ -523,6 +610,20 @@ function ekBolumler(m, s) {
         bagli.forEach(x => gosterilen.add(x));
         if (bagli.length) html += `<section class="madde-ek"><h2>Bu sistemdeki maddeler</h2>${kartlar(bagli)}</section>`;
     }
+    if (m && m.tur === "devlet") {
+        const ak = anahtar(m.ad);
+        // bağlı kurumlar: notunda "bagli: [[Devlet]]" yazanlar; alan yoksa devletin klasöründekiler
+        const kurumlar = DIZIN.maddeler.filter(x => x !== m && ["sirket", "kurum", "fraksiyon"].includes(x.tur) && (
+            x.ozellikler?.bagli ? anahtar(sistemAdiCoz(x.ozellikler.bagli) || "") === ak : (x.klasor && anahtar(x.klasor) === ak)));
+        kurumlar.forEach(x => gosterilen.add(x));
+        if (kurumlar.length) html += `<section class="madde-ek"><h2>Bağlı kurum ve şirketler</h2>${kartlar(kurumlar)}</section>`;
+        const adlar = new Set([m.ad, m.slug, ...(m.aliases || [])].map(anahtar));
+        const linkli = (tur) => DIZIN.maddeler.filter(x => x !== m && !gosterilen.has(x) && x.tur === tur && x.baglantilar.some(l => adlar.has(anahtar(l))));
+        const kisiler = linkli("karakter"); kisiler.forEach(x => gosterilen.add(x));
+        if (kisiler.length) html += `<section class="madde-ek"><h2>İlgili kişiler</h2>${kartlar(kisiler)}</section>`;
+        const olaylar = linkli("olay"); olaylar.forEach(x => gosterilen.add(x));
+        if (olaylar.length) html += `<section class="madde-ek"><h2>Olaylar</h2>${kartlar(olaylar)}</section>`;
+    }
     if (m) {
         const adlar = new Set([m.ad, m.slug, ...(m.aliases || [])].map(anahtar));
         const geri = DIZIN.maddeler.filter(x => x !== m && !gosterilen.has(x) && x.baglantilar.some(l => adlar.has(anahtar(l))));
@@ -566,7 +667,7 @@ async function maddeSayfasi(madde, kategori) {
             baslik: s ? m.ad : (h1 || m.ad),   // yıldız sayfalarında başlık her zaman yıldızın adı
             liste: TUR_LISTE[m.tur] || (s ? "yildizlar" : null), govdeHtml,
             alt: altParca.filter(Boolean).join(" · "),
-            kutu: s ? yildizKutusu(s, m) : gokYildiz ? gokCismiKutusu(m, gokYildiz) : genelKutu(m),
+            kutu: s ? yildizKutusu(s, m) : gokYildiz ? gokCismiKutusu(m, gokYildiz) : m.tur === "devlet" ? devletKutusu(m) : genelKutu(m),
             ek: ekBolumler(m, s)
         });
         return;
