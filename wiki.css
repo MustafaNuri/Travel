@@ -300,10 +300,19 @@ a.kategori-kutu { text-decoration: none !important; }
 
 /* Sistem şeması (bilgi kutusu) */
 .sistem-semasi { display: block; width: 100%; height: auto; background: rgba(0,0,0,0.35); border-radius: 6px; margin-bottom: 6px; }
+.sistem-panel { background: var(--panel); border: 1px solid var(--cizgi); border-radius: 10px; padding: 16px; }
+.sistem-panel .mini-not { margin: 4px 0 0; }
+@media (max-width: 640px) {   /* dar ekranda şema küçülmesin, yana kaydırılsın */
+    .sistem-panel { overflow-x: auto; padding: 12px; }
+    .sistem-semasi.buyuk { min-width: 560px; }
+}
 .sistem-semasi .sm-gezegen circle { transition: transform .2s; transform-box: fill-box; transform-origin: center; }
 .sistem-semasi a.sm-gezegen:hover circle { transform: scale(1.25); }
 .sistem-semasi a.sm-gezegen:hover text { fill: #fff; }
 .sistem-semasi .sm-gezegen.yok { cursor: help; }
+.sistem-semasi .sm-yildiz-kure { transition: filter .2s; }
+.sistem-semasi a.sm-yildiz:hover .sm-yildiz-kure { filter: brightness(1.18); }
+.sistem-semasi a.sm-yildiz:hover text { fill: #fff; }
 
 /* Gezegen/uydu başlık küresi: mat, parlamasız */
 .ib-kure.mat {

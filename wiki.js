@@ -11,7 +11,8 @@ const ETIKET = {                  // frontmatter anahtarı -> bilgi kutusu etike
     kurulus: "Kuruluş", kurucu: "Kurucu", lider: "Lider", meslek: "Meslek", uyruk: "Uyruk",
     bagli: "Bağlılık", baglilik: "Bağlılık", yas: "Yaş", atmosfer: "Atmosfer", iklim: "İklim",
     gelistirilme: "Geliştirilme", gelistiren: "Geliştiren", durum: "Durum", unvan: "Unvan",
-    gezegen: "Bağlı olduğu gezegen", yonetim: "Yönetim biçimi", ekonomi: "Ekonomi / Ana kaynak"
+    gezegen: "Bağlı olduğu gezegen", yonetim: "Yönetim biçimi", ekonomi: "Ekonomi / Ana kaynak",
+    sinif: "Sınıf", yapi: "Yapı", halka: "Halka", sira: "Yörünge sırası"
 };
 const DEVLET_ALAN_SIRASI = ["baskent", "kurulus", "kurucu", "yonetim", "lider", "nufus", "ekonomi"];
 const GIZLI_ALAN = new Set(["evren_adi", "tags", "cssclasses", "resim", "alt_baslik", "renk", "boyut"]);
@@ -25,7 +26,7 @@ const TUR_AD = {
 const LISTELER = {
     "gok-cisimleri": { ad: "Gök Cisimleri", aciklama: "Bilinen Galaksi'deki gök cisimleri.", alt: ["yildizlar", "gezegenler", "uydular", "istasyonlar"] },
     "yildizlar":     { ad: "Yıldızlar", ust: "gok-cisimleri", aciklama: "Bilinen yıldız sistemleri, bağlı oldukları devletlere göre." },
-    "gezegenler":    { ad: "Gezegenler", ust: "gok-cisimleri", turler: ["gezegen"], evren: "gezegenler", aciklama: "Gezegenler, bulundukları yıldız sistemine göre." },
+    "gezegenler":    { ad: "Gezegenler", ust: "gok-cisimleri", turler: ["gezegen"], sistemeGore: true, aciklama: "Gezegenler, bulundukları yıldız sistemine göre." },
     "uydular":       { ad: "Uydular", ust: "gok-cisimleri", turler: ["uydu"], sistemeGore: true, aciklama: "Uydular, bulundukları yıldız sistemine göre." },
     "istasyonlar":   { ad: "Uzay İstasyonları", ust: "gok-cisimleri", turler: ["istasyon"], aciklama: "Galaksideki uzay istasyonları." },
     "karakterler":   { ad: "Karakterler", turler: ["karakter"], aciklama: "Bilinen Galaksi'nin insanları." },
@@ -281,7 +282,8 @@ function bolgeEtiketi(d, ust) {
 /** Devlet adı (link); bölgeyse bağlı olduğu devlet + bölge etiketi */
 function devletLink(d) {
     const ust = bolgeninDevleti(d);
-    return ust ? `${linkHtml(ust, ust)} <span style="color:var(--soluk)">· ${esc(bolgeEtiketi(d, ust))}</span>` : linkHtml(d, d);
+    if (ust) return `${linkHtml(ust, coz(ust)?.ad || ust)} <span style="color:var(--soluk)">· ${esc(bolgeEtiketi(d, ust))}</span>`;
+    return linkHtml(d, coz(d)?.ad || d);   // "Yildiz Ateseligi" -> maddesindeki yazımıyla "Yıldız Ateşeliği"
 }
 
 /** Düz yazı hali (harita noktalarının ipuçları için) */
@@ -405,23 +407,88 @@ const GEZEGEN_BOYUT = { kucuk: 5, orta: 7, buyuk: 10, dev: 13 };   // gezegen no
 function sayiOzeti(ad) { let h = 0; for (const c of ad) h = (h * 31 + c.codePointAt(0)) >>> 0; return h; }
 
 /** Gezegenin rengi ve boyutu: yayınlanmış notunda "renk"/"boyut" varsa onlar, yoksa adından türetilen sabit bir değer */
+// Notta renk adı da yazılabilir: "renk: kırmızı", "halka: bej"
+const RENK_ADLARI = { kirmizi: "#c8553d", turuncu: "#d98b5f", sari: "#e0c068", beyaz: "#e8e4da", gri: "#9aa0a8", mavi: "#6fa3c7",
+    lacivert: "#3d5a99", kahverengi: "#9c7a5b", bej: "#d8c8a8", yesil: "#7fb07a", mor: "#b98fd6", pembe: "#d996b0", turkuaz: "#5fc4c0" };
+function renkCoz(v, varsayilan) {
+    const s = String(v ?? "").trim().replace(/^["']+|["']+$/g, "");   // Obsidian'da tırnak iki kez yazılmışsa da çalışsın
+    if (/^#[0-9a-f]{3,8}$/i.test(s)) return s;
+    return RENK_ADLARI[anahtar(s)] || varsayilan;
+}
+
+/** Gezegen sınıfları: her biri şemadaki boyutu, yüzey dokusunu ve (renk yazılmamışsa) renk tonlarını belirler */
+const GEZEGEN_SINIFLARI = [
+    { ad: "cüce gezegen", anahtar: ["cuce"], boyut: 4, doku: "kaya", renkler: ["#9aa0a8", "#b8ab98", "#8f8578"] },
+    { ad: "kayalık", anahtar: ["kayalik", "kaya", "karasal"], boyut: 6, doku: "kaya", renkler: ["#b98c6a", "#a8a29a", "#c9b28f", "#8f7a66"] },
+    { ad: "çöl gezegeni", anahtar: ["col"], boyut: 6, doku: "kaya", renkler: ["#d9b77a", "#c99a5b", "#e0c48f"] },
+    { ad: "okyanus gezegeni", anahtar: ["okyanus"], boyut: 7, doku: "okyanus", renkler: ["#3f7fbf", "#2f6aa8", "#4f93c9"] },
+    { ad: "süper dünya", anahtar: ["super"], boyut: 8, doku: "kaya", renkler: ["#7f9a6a", "#a08a70", "#8a9aa8"] },
+    { ad: "buz devi", anahtar: ["buz"], boyut: 10, doku: "buz", renkler: ["#6fc4c9", "#5b8fd9", "#8fb8e0"] },
+    { ad: "gaz devi", anahtar: ["gaz"], boyut: 13, doku: "gaz", renkler: ["#c9a77c", "#d98b5f", "#c9b28f", "#b9876a"] }
+];
+function gezegenSinifi(v) {
+    const k = anahtar(String(v ?? "").replace(/^["']+|["']+$/g, ""));
+    return k ? GEZEGEN_SINIFLARI.find(s => s.anahtar.some(a => k.startsWith(a))) || null : null;
+}
+
+/** Gezegenin şemadaki görünümü. Notta: sinif (gaz devi, buz devi, kayalık...), renk (isteğe bağlı), halka (true ya da renk) */
 function gezegenGorunumu(ad) {
     const oz = MADDE.get(anahtar(ad))?.ozellikler || {};
     const h = sayiOzeti(ad);
-    const boyut = GEZEGEN_BOYUT[anahtar(String(oz.boyut || ""))] || [5, 6, 7, 8, 10][h % 5];
-    const renk = /^#[0-9a-f]{3,8}$/i.test(String(oz.renk || "")) ? oz.renk : GEZEGEN_RENKLERI[(h >>> 3) % GEZEGEN_RENKLERI.length];
-    return { boyut, renk };
+    const sinif = gezegenSinifi(oz.sinif) || gezegenSinifi(oz.yapi);   // eski "yapi" alanı da okunur
+    const boyutAd = anahtar(String(oz.boyut || ""));
+    const boyut = (oz.sinif && sinif) ? sinif.boyut : (GEZEGEN_BOYUT[boyutAd] || sinif?.boyut || [5, 6, 7, 8, 10][h % 5]);
+    const renk = renkCoz(oz.renk, sinif ? sinif.renkler[h % sinif.renkler.length] : GEZEGEN_RENKLERI[(h >>> 3) % GEZEGEN_RENKLERI.length]);
+    const yapi = sinif ? sinif.doku : (boyutAd === "dev" ? "gaz" : null);
+    const hk = oz.halka, hs = anahtar(String(hk ?? "").replace(/^["']+|["']+$/g, ""));
+    const halka = hk === true || (hk && !["false", "yok", "hayir"].includes(hs)) ? renkCoz(hk, "#d8c8a8") : null;
+    return { boyut, renk, yapi, halka, h };
+}
+
+/** Rengi beyaza (t > 0) ya da siyaha (t < 0) doğru karıştırır */
+function renkKaristir(hex, t) {
+    let s = String(hex).replace("#", ""); if (s.length === 3) s = s.split("").map(c => c + c).join("");
+    const k = [0, 2, 4].map(i => parseInt(s.slice(i, i + 2), 16) || 0);
+    const hedef = t > 0 ? 255 : 0, a = Math.abs(t);
+    return "#" + k.map(v => Math.round(v + (hedef - v) * a).toString(16).padStart(2, "0")).join("");
 }
 
 const sade = (x) => anahtar(x).replace(/[\s\-–]/g, "");   // "Gama Kefir III" == "Gama Kefir - III"
 
-/** Sistemdeki gezegenler: evren.json sırası + yayınlanmış ama listede olmayan gezegen notları */
+/** Notun "sira" alanı; yoksa addaki Roma rakamı ("Eminence - IV" -> 4) ya da uydu harfi ("III-b" -> 2) */
+const ROMA = { I: 1, V: 5, X: 10, L: 50, C: 100 };
+function romaSayi(r) {
+    let t = 0;
+    for (let i = 0; i < r.length; i++) { const a = ROMA[r[i]], b = ROMA[r[i + 1]] || 0; t += a < b ? -a : a; }
+    return t;
+}
+function yorungeSirasi(ad) {
+    const v = String(MADDE.get(anahtar(ad))?.ozellikler?.sira ?? "").trim().replace(/^["']+|["']+$/g, "");
+    if (v !== "" && !isNaN(parseFloat(v))) return parseFloat(v);
+    const r = String(ad).match(/[\s\-–]([IVXLC]+)$/);
+    if (r) return romaSayi(r[1]);
+    const h = String(ad).match(/[\s\-–]([a-z])$/i);
+    if (h) return h[1].toLowerCase().charCodeAt(0) - 96;
+    return null;
+}
+/** Sıra numarası olanları sıraya dizer; olmayanlar listede önlerinde duran gezegenin hemen arkasında kalır */
+function yorungeyeGoreDiz(adlar) {
+    let onceki = 0;
+    return adlar.map((ad, i) => {
+        const s = yorungeSirasi(ad);
+        const k = s === null ? onceki + 0.001 * (i + 1) : s;
+        if (s !== null) onceki = s;
+        return { ad, k, i };
+    }).sort((a, b) => a.k - b.k || a.i - b.i).map(x => x.ad);
+}
+
+/** Sistemdeki gezegenler: yalnızca yayınlanmış gezegen notlarından ("sistem: [[Yıldız]]"), yörünge sırasına göre ("sira" alanı) */
 function sistemGezegenleri(s) {
-    const liste = (s.gezegenler || []).filter(g => g && String(g).trim());
+    const liste = [];
     const ak = anahtar(s.isim);
     DIZIN.maddeler.filter(x => x.tur === "gezegen" && anahtar(sistemAdiCoz(x.ozellikler?.sistem) || "") === ak)
         .forEach(x => { if (!liste.some(g => sade(g) === sade(x.ad))) liste.push(x.ad); });
-    return liste;
+    return yorungeyeGoreDiz(liste);
 }
 
 /** Bir uydunun bağlı olduğu gezegen: notundaki "gezegen" alanı, "Ay (Dünya)" yazımı ya da "Gama Kefir III-b" adı */
@@ -440,60 +507,129 @@ function sistemUydulari(s, gezegenler) {
     const ak = anahtar(s.isim);
     DIZIN.maddeler.filter(x => x.tur === "uydu" && anahtar(sistemAdiCoz(x.ozellikler?.sistem) || "") === ak)
         .forEach(x => { if (!adlar.some(u => anahtar(u) === anahtar(x.ad))) adlar.push(x.ad); });
-    return adlar.map(ad => ({ ad, ebeveyn: uyduEbeveyni(ad, gezegenler) }));
+    return yorungeyeGoreDiz(adlar).map(ad => ({ ad, ebeveyn: uyduEbeveyni(ad, gezegenler) }));
 }
 
-function sistemSemasi(s, gezegenler, uydular = [], vurgu = null) {
-    const W = 290, yildizGenislik = 54, bas = yildizGenislik + 22, son = W - 16;
+function sistemSemasi(s, gezegenler, uydular = [], vurgu = null, buyuk = false) {
+    // buyuk: maddenin altındaki geniş "Sistem" bölümü; değilse bilgi kutusuna sığan küçük hali
+    const K = buyuk ? 1.8 : 1;                                            // gezegen ve uydu boyut çarpanı
+    const W = buyuk ? 760 : 290, yildizGenislik = buyuk ? 96 : 54;
+    // yıldızın adı dairenin sağ üst kenarında durur; ilk gezegen biraz sağdan başlar,
+    // uydusu varsa (uydu adın hizasına çıkar) adın bittiği yerin de sağına kayar
+    const adSag = yildizGenislik + 10 + String(s.isim).length * 15 * 0.62;
+    const ilkUydulu = buyuk && gezegenler.length && uydular.some(u => u.ebeveyn === gezegenler[0]);
+    const bas = Math.max(yildizGenislik + (buyuk ? 70 : 22), ilkUydulu ? adSag + 16 : 0), son = W - (buyuk ? 70 : 16);   // sağda halkalara yer kalsın
     const n = gezegenler.length;
-    const adim = n > 1 ? Math.min(48, (son - bas) / (n - 1)) : 0;   // az gezegen varsa yayılmasın
+    const adim = n > 1 ? Math.min(buyuk ? 150 : 48, (son - bas) / (n - 1)) : 0;   // az gezegen varsa yayılmasın
+    const yatay = buyuk && (n <= 1 || adim >= 95);                        // yer varsa adlar yatay ve okunaklı
+    const fs = buyuk ? 13 : 9, ur = buyuk ? 5 : 3, uyduAra = buyuk ? 16 : 10;
     const enCokUydu = Math.max(0, ...gezegenler.map(g => uydular.filter(u => u.ebeveyn === g).length));
-    const cy = 50 + Math.max(0, enCokUydu - 2) * 10;                    // uydular üstte yer açsın
+    const enBuyuk = Math.max(0, ...gezegenler.map(g => gezegenGorunumu(g).boyut)) * K;
+    const cy = (buyuk ? 34 + enBuyuk : 50) + Math.max(0, enCokUydu - (buyuk ? 1 : 2)) * uyduAra;   // uydular üstte yer açsın
     const yildizRenk = s.renk || "#ffcc66";
     const enUzun = Math.max(0, ...gezegenler.map(g => String(g).length));
-    const H = cy + 26 + Math.min(110, enUzun * 5.4);
+    const H = yatay ? cy + enBuyuk + 40 : cy + 26 * K + Math.min(buyuk ? 170 : 110, enUzun * 5.4 * fs / 9);
     const yr = H * 1.1, ycx = yildizGenislik - yr;                       // yıldız: şemanın solunu boydan boya kaplar
     const vk = vurgu ? anahtar(vurgu) : null;
-    const halka = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="#fff" stroke-opacity="0.85" stroke-width="0.8"/>`;
-    let defs = `<radialGradient id="sm-yildiz" cx="92%" cy="45%" r="60%"><stop offset="0%" stop-color="#fff"/><stop offset="35%" stop-color="${esc(yildizRenk)}"/><stop offset="100%" stop-color="${esc(yildizRenk)}" stop-opacity="0.55"/></radialGradient>`;
+    const id = buyuk ? "smb" : "sm";                                      // iki şema aynı sayfada olursa çakışmasın
+    const halka = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="#fff" stroke-opacity="0.85" stroke-width="${buyuk ? 1.2 : 0.8}"/>`;
+    let defs = `<radialGradient id="${id}-yildiz" cx="92%" cy="45%" r="60%"><stop offset="0%" stop-color="#fff"/><stop offset="35%" stop-color="${esc(yildizRenk)}"/><stop offset="100%" stop-color="${esc(yildizRenk)}" stop-opacity="0.55"/></radialGradient>`;
     // gezegenler mat: düz renk + üstüne yumuşak bir gölge (parlama yok)
-    defs += `<radialGradient id="sm-golge" cx="38%" cy="35%" r="75%"><stop offset="0%" stop-color="#000" stop-opacity="0"/><stop offset="60%" stop-color="#000" stop-opacity="0.18"/><stop offset="100%" stop-color="#000" stop-opacity="0.55"/></radialGradient>`;
-    const matKure = (x, y, r, renk) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${esc(renk)}"/><circle cx="${x}" cy="${y}" r="${r}" fill="url(#sm-golge)"/>`;
+    defs += `<radialGradient id="${id}-golge" cx="38%" cy="35%" r="75%"><stop offset="0%" stop-color="#000" stop-opacity="0"/><stop offset="60%" stop-color="#000" stop-opacity="0.18"/><stop offset="100%" stop-color="#000" stop-opacity="0.55"/></radialGradient>`;
+    const matKure = (x, y, r, renk) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${esc(renk)}"/><circle cx="${x}" cy="${y}" r="${r}" fill="url(#${id}-golge)"/>`;
+    let kirpSay = 0;
+    /** Gezegen: yapısına göre bantlar/lekeler, varsa arkadan ve önden geçen halka */
+    const gezegenKure = (x, y, r, g) => {
+        const rx = r * 2.15, ry = r * 0.62, ak = `rotate(-14 ${x} ${y})`;
+        const halkaYay = (ust) => g.halka
+            ? `<path d="M ${x - rx} ${y} A ${rx} ${ry} 0 0 ${ust ? 1 : 0} ${x + rx} ${y}" transform="${ak}" fill="none" stroke="${esc(g.halka)}" stroke-opacity="${ust ? 0.55 : 0.9}" stroke-width="${Math.max(1, r * 0.24)}"/>` +
+              `<path d="M ${x - rx * 0.86} ${y} A ${rx * 0.86} ${ry * 0.86} 0 0 ${ust ? 1 : 0} ${x + rx * 0.86} ${y}" transform="${ak}" fill="none" stroke="${esc(renkKaristir(g.halka, 0.35))}" stroke-opacity="${ust ? 0.35 : 0.6}" stroke-width="${Math.max(0.6, r * 0.09)}"/>`
+            : "";
+        let doku = "";
+        if (g.yapi) {
+            const kid = `${id}-k${kirpSay++}`;
+            let ic = "";
+            if (g.yapi === "gaz" || g.yapi === "buz") {
+                const n = g.yapi === "gaz" ? 7 : 4, op = g.yapi === "gaz" ? 0.34 : 0.22;
+                for (let k = 0; k < n; k++) {
+                    const by = y - r + (k + 0.5) * (2 * r / n), bh = (2 * r / n) * (0.45 + ((g.h >> k) & 1) * 0.25);
+                    ic += `<rect x="${x - r}" y="${by - bh / 2}" width="${2 * r}" height="${bh}" fill="${renkKaristir(g.renk, k % 2 ? -0.35 : 0.3)}" fill-opacity="${op}"/>`;
+                }
+                if (g.yapi === "gaz" && g.h % 3 === 0)   // bazı gaz devlerinde büyük bir fırtına lekesi
+                    ic += `<ellipse cx="${x + r * 0.32}" cy="${y + r * 0.28}" rx="${r * 0.26}" ry="${r * 0.14}" fill="${renkKaristir(g.renk, -0.4)}" fill-opacity="0.55"/>`;
+            } else if (g.yapi === "okyanus") {
+                for (let k = 0; k < 4; k++) {
+                    const a = ((g.h >> (k * 3)) % 360) * Math.PI / 180, d = r * (0.15 + ((g.h >> (k * 2)) % 5) * 0.13);
+                    ic += `<ellipse cx="${x + Math.cos(a) * d}" cy="${y + Math.sin(a) * d}" rx="${r * (0.32 + (k % 2) * 0.12)}" ry="${r * 0.1}" fill="#fff" fill-opacity="0.38"/>`;
+                }
+            } else if (g.yapi === "kaya") {
+                for (let k = 0; k < 4; k++) {
+                    const a = ((g.h >> (k * 3)) % 360) * Math.PI / 180, d = r * (0.25 + ((g.h >> (k * 2)) % 5) * 0.12);
+                    ic += `<circle cx="${x + Math.cos(a) * d}" cy="${y + Math.sin(a) * d}" r="${r * (0.12 + (k % 2) * 0.08)}" fill="${renkKaristir(g.renk, -0.3)}" fill-opacity="0.45"/>`;
+                }
+            }
+            doku = `<clipPath id="${kid}"><circle cx="${x}" cy="${y}" r="${r}"/></clipPath><g clip-path="url(#${kid})">${ic}</g>`;
+        }
+        return halkaYay(true) + `<circle cx="${x}" cy="${y}" r="${r}" fill="${esc(g.renk)}"/>` + doku +
+            `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#${id}-golge)"/>` + halkaYay(false);
+    };
     const sarmala = (ad, ic, sinif) => { const c = coz(ad); return c ? `<a href="${c.url}" class="${sinif}">${ic}</a>` : `<g class="${sinif} yok">${ic}</g>`; };
     let govde = "";
     gezegenler.forEach((ad, i) => {
         const x = bas + i * adim;
-        const { boyut, renk } = gezegenGorunumu(ad);
+        const g = gezegenGorunumu(ad), boyut = g.boyut * K;
         const c = coz(ad), secili = anahtar(ad) === vk;
+        const yaziRenk = secili ? "#fff" : c ? "#FFD700" : "#c4cad4", kalin = secili ? 'font-weight="700"' : "";
+        const yazi = yatay
+            ? `<line x1="${x}" y1="${cy + boyut + 3}" x2="${x}" y2="${cy + enBuyuk + 10}" stroke="#8b93a3" stroke-width="0.8"/>` +
+              `<text x="${x}" y="${cy + enBuyuk + 26}" text-anchor="middle" font-size="${fs}" ${kalin} fill="${yaziRenk}">${esc(ad)}</text>`
+            : `<line x1="${x}" y1="${cy + boyut + 3}" x2="${x}" y2="${cy + 16 * K}" stroke="#8b93a3" stroke-width="0.6"/>` +
+              `<text x="${x}" y="${cy + 20 * K}" transform="rotate(-90 ${x} ${cy + 20 * K})" text-anchor="end" dominant-baseline="middle" font-size="${fs}" ${kalin} fill="${yaziRenk}">${esc(ad)}</text>`;
         const ic = `<title>${esc(ad)}${c ? "" : " · " + YAZILMADI}</title>` +
-            matKure(x, cy, boyut, renk) + (secili ? halka(x, cy, boyut + 3) : "") +
-            `<line x1="${x}" y1="${cy + boyut + 3}" x2="${x}" y2="${cy + 16}" stroke="#8b93a3" stroke-width="0.6"/>` +
-            `<text x="${x}" y="${cy + 20}" transform="rotate(-90 ${x} ${cy + 20})" text-anchor="end" dominant-baseline="middle" font-size="9" ${secili ? 'font-weight="700"' : ""} fill="${secili ? "#fff" : c ? "#FFD700" : "#c4cad4"}">${esc(ad)}</text>`;
+            gezegenKure(x, cy, boyut, g) + (secili ? halka(x, cy, boyut + 3) : "") + yazi;
         govde += sarmala(ad, ic, "sm-gezegen");
         // bu gezegenin uyduları: gezegenin üstünde küçük noktalar
         uydular.filter(u => u.ebeveyn === ad).forEach((u, j) => {
-            const uy = cy - boyut - 8 - j * 10, ur = 3;
+            const uy = cy - boyut - (buyuk ? 12 : 8) - j * uyduAra;
             const ug = gezegenGorunumu(u.ad), us = anahtar(u.ad) === vk, uc = coz(u.ad);
             const uic = `<title>${esc(u.ad)} (uydu)${uc ? "" : " · " + YAZILMADI}</title>` +
-                `<line x1="${x}" y1="${uy + ur}" x2="${x}" y2="${cy - boyut - 1}" stroke="#8b93a3" stroke-opacity="0.5" stroke-width="0.5"/>` +
-                matKure(x, uy, ur, ug.renk) + (us ? halka(x, uy, ur + 2.5) : "");
+                `<line x1="${x}" y1="${uy + ur}" x2="${x}" y2="${cy - boyut - 1}" stroke="#8b93a3" stroke-opacity="0.5" stroke-width="${buyuk ? 0.8 : 0.5}"/>` +
+                matKure(x, uy, ur, ug.renk) + (us ? halka(x, uy, ur + 2.5) : "") +
+                (buyuk ? `<text x="${x + ur + 6}" y="${uy}" dominant-baseline="middle" font-size="11" fill="${us ? "#fff" : uc ? "#FFD700" : "#c4cad4"}">${esc(u.ad)}</text>` : "");
             govde += sarmala(u.ad, uic, "sm-gezegen sm-uydu");
         });
     });
-    return `<svg class="sistem-semasi" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(s.isim)} sistemi" font-family="Oxanium, sans-serif">
+    // Yıldız: adı dairenin sağ üst kenarının hemen dışında; kendi sayfasında değilsek yıldıza tıklanır
+    const adY = 16, adX = ycx + Math.sqrt(Math.max(0, yr * yr - (adY - cy) ** 2)) + 10;   // dairenin o yükseklikteki kenarı
+    const yc = vurgu ? coz(s.isim) : null;                                // vurgu yoksa zaten yıldızın sayfasındayız
+    const yildizIc = `<title>${esc(s.isim)}</title>` +
+        `<circle class="sm-yildiz-kure" cx="${ycx}" cy="${cy}" r="${yr}" fill="url(#${id}-yildiz)"/>` +
+        (buyuk ? `<text x="${adX}" y="${adY}" dominant-baseline="middle" font-size="15" font-weight="700" fill="${yc ? "#FFD700" : "#fff"}">${esc(s.isim)}</text>` : "");
+    const yildiz = yc ? `<a href="${yc.url}" class="sm-yildiz">${yildizIc}</a>` : `<g class="sm-yildiz">${yildizIc}</g>`;
+    return `<svg class="sistem-semasi${buyuk ? " buyuk" : ""}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(s.isim)} sistemi" font-family="Oxanium, sans-serif">
         <defs>${defs}</defs>
-        <rect x="0" y="${cy - 9}" width="${W}" height="18" fill="${esc(yildizRenk)}" fill-opacity="0.13"/>
-        <circle cx="${ycx}" cy="${cy}" r="${yr}" fill="url(#sm-yildiz)"/>
+        <line x1="${yildizGenislik}" y1="${cy}" x2="${W - 12}" y2="${cy}" stroke="#ffffff" stroke-opacity="0.35" stroke-width="${buyuk ? 1 : 0.6}"/>
+        ${yildiz}
         ${govde}
-    </svg><p class="mini-not">Ölçekli değildir · uydular gezegenlerinin üstünde</p>`;
+    </svg>`;
 }
 
-/** Bilgi kutusundaki "Sistem" bölümü (yıldız, gezegen ve uydu sayfalarında ortak) */
+/** Bilgi kutusundaki "Sistem" bölümü: gezegen ve uydu listesi (şemanın büyüğü maddenin altında) */
 function sistemBolumu(s, vurgu) {
     const gezegen = sistemGezegenleri(s), uydu = sistemUydulari(s, gezegen);
-    const sema = gezegen.length ? sistemSemasi(s, gezegen, uydu, vurgu) : `<p class="mini-not" style="text-align:left">Kayıtlı gezegen yok.</p>`;
-    const cip = uydu.length ? `<p class="mini-not" style="text-align:left;margin:10px 0 6px">Uydular (${uydu.length})</p>${cipler(uydu.map(u => u.ad))}` : "";
-    return bolum("Sistem", sema + cip);
+    if (!gezegen.length && !uydu.length) return bolum("Sistem", `<p class="mini-not" style="text-align:left">Kayıtlı gezegen yok.</p>`);
+    const g = gezegen.length ? `<p class="mini-not" style="text-align:left;margin:0 0 6px">Gezegenler (${gezegen.length})</p>${cipler(gezegen)}` : "";
+    const u = uydu.length ? `<p class="mini-not" style="text-align:left;margin:10px 0 6px">Uydular (${uydu.length})</p>${cipler(uydu.map(x => x.ad))}` : "";
+    return bolum("Sistem", g + u);
+}
+
+/** Maddenin altındaki geniş sistem şeması (yıldız, gezegen ve uydu sayfalarında) */
+function buyukSistemBolumu(s, vurgu) {
+    if (!s) return "";
+    const gezegen = sistemGezegenleri(s);
+    if (!gezegen.length) return "";
+    const uydu = sistemUydulari(s, gezegen);
+    return `<section class="madde-ek"><h2>${esc(s.isim)} sistemi</h2><div class="sistem-panel">${sistemSemasi(s, gezegen, uydu, vurgu, true)}</div></section>`;
 }
 
 // ---- Devlet sayfaları ----------------------------------------------------------
@@ -559,9 +695,9 @@ function devletKutusu(m) {
     const { sistemler, genisleme, bolgeAdi } = devletSistemleri(m);
     // başkentin yıldızı: başkent bir gezegen/şehir ise onu barındıran sistem
     const bAd = sistemAdiCoz(oz.baskent);
-    const baskentYildiz = bAd ? (EVREN.sistemler.find(s => anahtar(s.isim) === anahtar(bAd) || (s.gezegenler || []).some(g => g && anahtar(g) === anahtar(bAd)))
+    const baskentYildiz = bAd ? (EVREN.sistemler.find(s => anahtar(s.isim) === anahtar(bAd))
         || SISTEM.get(anahtar(sistemAdiCoz(MADDE.get(anahtar(bAd))?.ozellikler?.sistem) || ""))) : null;
-    const gezegenSayisi = sistemler.reduce((t, s) => t + (s.gezegenler || []).filter(g => g && String(g).trim()).length, 0);
+    const gezegenSayisi = sistemler.reduce((t, s) => t + sistemGezegenleri(s).length, 0);
     const ozet = `<p class="mini-not" style="text-align:left;margin:8px 0 6px">${sistemler.length} yıldız sistemi · ${gezegenSayisi} bilinen gezegen${genisleme.length ? ` · genişleme bölgesinde ${genisleme.length} sistem` : ""}</p>`;
     const topraklar = sistemler.length || genisleme.length
         ? topraklarHaritasi(m, renk, sistemler, genisleme, baskentYildiz) + ozet + cipler(sistemler.map(s => s.isim))
@@ -699,7 +835,7 @@ async function maddeSayfasi(madde, kategori) {
             liste: TUR_LISTE[m.tur] || (s ? "yildizlar" : null), govdeHtml,
             alt: altParca.filter(Boolean).join(" · "),
             kutu: s ? yildizKutusu(s, m) : gokYildiz ? gokCismiKutusu(m, gokYildiz) : m.tur === "devlet" ? devletKutusu(m) : genelKutu(m),
-            ek: ekBolumler(m, s)
+            ek: buyukSistemBolumu(s || gokYildiz, s ? null : m.ad) + ekBolumler(m, s)
         });
         return;
     }
@@ -708,7 +844,7 @@ async function maddeSayfasi(madde, kategori) {
             baslik: s.isim, liste: "yildizlar",
             alt: `Yıldız sistemi${s.devlet ? " · " + devletLink(s.devlet) : ""}`,
             govdeHtml: `<p class="bos-not">Bu sistem hakkında henüz bir madde yazılmadı. Haritadaki verileri sağdaki bilgi kutusunda görebilirsin.</p>`,
-            kutu: yildizKutusu(s, null), ek: ekBolumler(null, s)
+            kutu: yildizKutusu(s, null), ek: buyukSistemBolumu(s, null) + ekBolumler(null, s)
         });
         return;
     }
@@ -737,13 +873,8 @@ function listeKayitlari(k) {
         });
     }
     const kayit = new Map();
-    if (L.evren) {
-        for (const s of EVREN.sistemler) for (const g of (s[L.evren] || []).filter(x => x && String(x).trim())) {
-            kayit.set(anahtar(g), { ad: g, grup: s.isim });
-        }
-    }
     for (const m of DIZIN.maddeler.filter(m => (L.turler || []).includes(m.tur))) {
-        const grup = (L.evren || L.sistemeGore) ? (sistemAdiCoz(m.ozellikler?.sistem) || "Sistemi bilinmeyen") : (L.grupla ? (TUR_COGUL[m.tur] || "Diğer") : "");
+        const grup = L.sistemeGore ? (sistemAdiCoz(m.ozellikler?.sistem) || "Sistemi bilinmeyen") : (L.grupla ? (TUR_COGUL[m.tur] || "Diğer") : "");
         kayit.set(anahtar(m.ad), { ad: m.ad, grup });
     }
     return [...kayit.values()];
@@ -767,7 +898,16 @@ function listeGovdesi(k) {
     if (gruplar.has("Bağımsız")) adlar = adlar.filter(g => g !== "Bağımsız").concat("Bağımsız");
     if (gruplar.has("Sistemi bilinmeyen")) adlar = adlar.filter(g => g !== "Sistemi bilinmeyen").concat("Sistemi bilinmeyen");
     return adlar.map(g => {
-        const ogeler = gruplar.get(g).sort((a, b) => k === "yildizlar" ? 0 : a.ad.localeCompare(b.ad, "tr"));
+        let ogeler = gruplar.get(g).sort((a, b) => k === "yildizlar" ? 0 : a.ad.localeCompare(b.ad, "tr"));
+        const sis = (k === "gezegenler" || k === "uydular") && EVREN.sistemler.find(s => s.isim === g);
+        if (sis) {   // gezegen/uydu listeleri şemadaki gibi yıldızdan uzaklık sırasıyla
+            const gez = sistemGezegenleri(sis);
+            const sira = k === "gezegenler" ? gez
+                : sistemUydulari(sis, gez).map((u, i) => ({ ad: u.ad, k: (u.ebeveyn ? gez.indexOf(u.ebeveyn) : gez.length) * 1000 + i }))
+                    .sort((a, b) => a.k - b.k).map(u => u.ad);
+            const yer = (ad) => { const i = sira.findIndex(x => anahtar(x) === anahtar(ad)); return i < 0 ? 1e9 : i; };
+            ogeler = [...ogeler].sort((a, b) => yer(a.ad) - yer(b.ad));
+        }
         const renk = k === "yildizlar" ? DEVLET_RENK[g] : null;
         const baslik = !g ? "" : `<h2 class="liste-grup-baslik">${renk ? `<span class="devlet-nokta" style="background:${renk}"></span>` : ""}${g === "Bağımsız" || g === "Sistemi bilinmeyen" ? esc(g) : linkHtml(g, g)}<small>${ogeler.length}</small></h2>`;
         return `<section class="liste-grup">${baslik}<div class="liste-izgara">${ogeler.map(listeKutusu).join("")}</div></section>`;

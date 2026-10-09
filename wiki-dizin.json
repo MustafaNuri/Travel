@@ -104,32 +104,32 @@
       "durum": "eklendi"
     },
     {
-      "baslik": "Luna",
-      "url": "wiki.html?madde=Luna",
-      "tur": "uydu",
+      "baslik": "Dünya",
+      "url": "wiki.html?madde=Dünya",
+      "tur": "gezegen",
       "tarih": "2026-10-09",
       "durum": "eklendi"
     },
     {
-      "baslik": "Tarihçe: Galaksinin Kısa Tarihi",
-      "url": "tarihce.html#bolum-1",
-      "tur": "tarihce",
+      "baslik": "Eminence - IV",
+      "url": "wiki.html?madde=Eminence_-_IV",
+      "tur": "gezegen",
       "tarih": "2026-10-09",
       "durum": "eklendi"
     },
     {
-      "baslik": "Kısım 1: Başlangıç",
-      "url": "roman.html#bolum-1",
-      "tur": "bolum",
+      "baslik": "Erendil",
+      "url": "wiki.html?madde=Erendil",
+      "tur": "gezegen",
       "tarih": "2026-10-09",
-      "durum": "guncellendi"
+      "durum": "eklendi"
     },
     {
-      "baslik": "Kısım 2: Aforoz",
-      "url": "roman.html#bolum-2",
-      "tur": "bolum",
+      "baslik": "Gaida",
+      "url": "wiki.html?madde=Gaida",
+      "tur": "gezegen",
       "tarih": "2026-10-09",
-      "durum": "guncellendi"
+      "durum": "eklendi"
     }
   ],
   "maddeler": [
@@ -207,6 +207,30 @@
       "son_degisim": "2026-10-09"
     },
     {
+      "ad": "Dünya",
+      "slug": "Dünya",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Dünya.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Sol]]",
+        "sira": 3,
+        "renk": "#0ca7fa",
+        "sinif": "kayalık",
+        "halka": null
+      },
+      "baglantilar": [
+        "Sol"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "54f7f09238b5",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
       "ad": "Eminence",
       "slug": "Eminence",
       "kategori": "Gok_Cisimleri/Yildizlar",
@@ -232,6 +256,127 @@
       "son_degisim": "2026-10-08"
     },
     {
+      "ad": "Eminence - IV",
+      "slug": "Eminence_-_IV",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Eminence_-_IV.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Eminence]]",
+        "sira": null,
+        "renk": "#801700",
+        "sinif": "gaz devi",
+        "halka": "#801700"
+      },
+      "baglantilar": [
+        "Eminence"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "ed979046a551",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "ad": "Erendil",
+      "slug": "Erendil",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Erendil.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Kito]]",
+        "sira": null,
+        "sinif": "kayalık",
+        "halka": null,
+        "renk": "#9c5800",
+        "gravity": "0.82"
+      },
+      "baglantilar": [
+        "Kito"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "102a9ad2ec5e",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "ad": "Gaida",
+      "slug": "Gaida",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Gaida.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Eminence]]",
+        "sira": 2,
+        "renk": "#fffeeb",
+        "sinif": "süper dünya",
+        "halka": null,
+        "gravity": "1.2 g"
+      },
+      "baglantilar": [
+        "Eminence"
+      ],
+      "ozet": "Yüzeyindeki toprakta yoğunlukla Kalsiyum Karbonat (CaCO3) bulunduğundan, bembeyaz görüntüsünü yer yer beliren yeşil ormanlar ve ufak az sayıda açık mavi okyanusları kaplayan Gaida, YYK kataloğuna göre Az yoğunlukta yaşam…",
+      "klasor": null,
+      "imza": "3fc8705089e1",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "ad": "Jüpiter",
+      "slug": "Jüpiter",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Jüpiter.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sinif": "gaz devi",
+        "halka": null,
+        "sistem": "[[Sol]]",
+        "sira": 5
+      },
+      "baglantilar": [
+        "Sol"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "fb29f6a157da",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "ad": "Locket",
+      "slug": "Locket",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Locket.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Andia]]",
+        "sira": 3,
+        "renk": "#47ab11",
+        "sinif": "kayalık",
+        "halka": null
+      },
+      "baglantilar": [
+        "Andia"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "e2e673914528",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
       "ad": "Luna",
       "slug": "Luna",
       "kategori": "Gok_Cisimleri/Gezegenler",
@@ -242,8 +387,10 @@
       "ozellikler": {
         "sistem": "[[Sol]]",
         "gezegen": "[[Dünya]]",
+        "sira": 1,
         "renk": null,
-        "boyut": null
+        "sinif": "kayalık",
+        "halka": null
       },
       "baglantilar": [
         "Sol",
@@ -251,7 +398,31 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "956446e463a6",
+      "imza": "af68227053a7",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "ad": "Mars",
+      "slug": "Mars",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Mars.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Sol]]",
+        "sira": 4,
+        "renk": "#c46231",
+        "sinif": "kayalık",
+        "halka": null
+      },
+      "baglantilar": [
+        "Sol"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "636e86fb8ea7",
       "ilk_yayin": "2026-10-09",
       "son_degisim": "2026-10-09"
     },
@@ -280,6 +451,54 @@
       "son_degisim": "2026-10-09"
     },
     {
+      "ad": "Merkür",
+      "slug": "Merkür",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Merkür.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Sol]]",
+        "sira": 1,
+        "renk": "#969696",
+        "sinif": "kayalık",
+        "halka": null
+      },
+      "baglantilar": [
+        "Sol"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "308309d82262",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "ad": "Neptün",
+      "slug": "Neptün",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Neptün.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Sol]]",
+        "sira": 8,
+        "renk": "#0068de",
+        "sinif": "buz devi",
+        "halka": null
+      },
+      "baglantilar": [
+        "Sol"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "0d5706eff075",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
       "ad": "Pulsar Koloni Devleti",
       "slug": "Pulsar_Koloni_Devleti",
       "kategori": "Fraksiyonlar",
@@ -289,7 +508,7 @@
       "aliases": [],
       "ozellikler": {
         "baskent": null,
-        "kurulus": "2208",
+        "kurulus": 2208,
         "kurucu": "[[Arya Tomokazu]]",
         "yonetim": null,
         "lider": null,
@@ -317,7 +536,31 @@
       ],
       "ozet": "Merkez Cumhuriyeti'nden sonra kurulan ilk büyük çaplı yıldızlararası devlet olan Pulsar Koloni Devleti, 2208 yılında Arya Tomokazu tarafından Andia, Kito ve Penton yıldızlarını barındıracak şekilde kurulmuştur. İlerleyen…",
       "klasor": "Pulsar Koloni Devleti",
-      "imza": "f7a5cbffd5af",
+      "imza": "1cd5966a2000",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "ad": "Satürn",
+      "slug": "Satürn",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Satürn.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Sol]]",
+        "sira": 6,
+        "renk": "#f7c923",
+        "sinif": "gaz devi",
+        "halka": "#f7d352"
+      },
+      "baglantilar": [
+        "Sol"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "4d3185d31be7",
       "ilk_yayin": "2026-10-09",
       "son_degisim": "2026-10-09"
     },
@@ -336,6 +579,32 @@
       "imza": "16427ba4d004",
       "ilk_yayin": "2026-10-08",
       "son_degisim": "2026-10-08"
+    },
+    {
+      "ad": "Titan",
+      "slug": "Titan",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Titan.md",
+      "tur": "uydu",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Sol]]",
+        "gezegen": "[[Satürn]]",
+        "sira": 1,
+        "renk": "#ebc923",
+        "sinif": "kayalık",
+        "halka": null
+      },
+      "baglantilar": [
+        "Sol",
+        "Satürn"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "d85aa37475b2",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
     },
     {
       "ad": "Üç Yıldız Şehirleri",
@@ -362,6 +631,30 @@
       "son_degisim": "2026-10-09"
     },
     {
+      "ad": "Uranüs",
+      "slug": "Uranüs",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Uranüs.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Sol]]",
+        "sira": 7,
+        "renk": "#52c3f7",
+        "sinif": "buz devi",
+        "halka": "#52c3f7"
+      },
+      "baglantilar": [
+        "Sol"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "68add7c01c33",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
       "ad": "Venno",
       "slug": "Venno",
       "kategori": "Gok_Cisimleri/Gezegenler",
@@ -372,8 +665,10 @@
       "ozellikler": {
         "sistem": "[[Eminence]]",
         "gezegen": "[[Eminence - IV]]",
+        "sira": null,
         "renk": null,
-        "boyut": null,
+        "sinif": null,
+        "halka": null,
         "gravity": "0.65 g"
       },
       "baglantilar": [
@@ -385,9 +680,33 @@
       ],
       "ozet": "Eminence yıldızının 4. gaz devi gezegeninin bir uydusu olan Venno, Yıldız Ateşeliği sınırları içerisinde bulunmaktadır. Uydu üzerinde çeşitli irili ufaklı yerleşimler olsa da asıl ününü barındırdığı Venno Üniversitesi'ne…",
       "klasor": null,
-      "imza": "55a30f1af217",
+      "imza": "61b299ddb9d1",
       "ilk_yayin": "2026-10-08",
-      "son_degisim": "2026-10-08"
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "ad": "Venüs",
+      "slug": "Venüs",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Venüs.md",
+      "tur": "gezegen",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Sol]]",
+        "sira": 2,
+        "renk": "#d4a420",
+        "sinif": "kayalık",
+        "halka": null
+      },
+      "baglantilar": [
+        "Sol"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "61e531602d6b",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
     },
     {
       "ad": "Yıldız Ateşeliği",
@@ -427,8 +746,21 @@
     "wiki/Fraksiyonlar/Pulsar_Koloni_Devleti.md",
     "wiki/Fraksiyonlar/Yıldız_Ateşeliği.md",
     "wiki/Fraksiyonlar/Üç_Yıldız_Şehirleri.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Dünya.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Eminence_-_IV.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Erendil.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Gaida.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Jüpiter.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Locket.md",
     "wiki/Gok_Cisimleri/Gezegenler/Luna.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Mars.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Merkür.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Neptün.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Satürn.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Titan.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Uranüs.md",
     "wiki/Gok_Cisimleri/Gezegenler/Venno.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Venüs.md",
     "wiki/Gok_Cisimleri/Yildizlar/Eminence.md",
     "wiki/Gok_Cisimleri/Yildizlar/Tau_Ceti.md",
     "wiki/Teknoloji/Antimadde_Motoru.md"

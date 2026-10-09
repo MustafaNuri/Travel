@@ -164,7 +164,8 @@ const devletHaritasi = new Map();
 const SISTEMLER = new Map();   // isim -> { sistem, mesh, etiket }
 const KOMSULAR = new Map();    // isim -> [{ isim, mesafe }]
 const ESLER = new Map();       // çift sistemler: isim -> eşinin adı (evren.json "ciftler")
-const UYDU_NOTLARI = new Map(); // yıldız anahtarı -> [{ ad, gezegen }] (yayınlanmış uydu maddeleri)
+const UYDU_NOTLARI = new Map(); // yıldız anahtarı -> [{ ad, gezegen, sira }] (yayınlanmış uydu maddeleri)
+const GEZEGEN_NOTLARI = new Map(); // yıldız anahtarı -> [{ ad, sira }] (yayınlanmış gezegen maddeleri)
 const MADDELER = new Map();    // anahtar -> yayınlanmış wiki maddesi (wiki-dizin.json)
 let DEVLET_RENK = {};
 let BOLGELER = {};               // bölge -> bağlı olduğu devlet (evren.json "bolgeler")
@@ -177,6 +178,24 @@ function anahtar(s) {
         .replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u")
         .replace(/ö/g, "o").replace(/ç/g, "c").replace(/â/g, "a").replace(/î/g, "i").replace(/û/g, "u")
         .replace(/[\s_]+/g, " ").trim();
+}
+// Yörünge sırası: notun "sira" alanı; yoksa addaki Roma rakamı ("Eminence - IV" -> 4) ya da uydu harfi ("III-b" -> 2)
+function yorungeSirasi(ad, sira) {
+    const v = String(sira ?? "").trim().replace(/^["']+|["']+$/g, "");
+    if (v !== "" && !isNaN(parseFloat(v))) return parseFloat(v);
+    const r = String(ad).match(/[\s\-–]([IVXLC]+)$/);
+    if (r) {
+        const D = { I: 1, V: 5, X: 10, L: 50, C: 100 };
+        return [...r[1]].reduce((t, c, i, a) => t + (D[c] < (D[a[i + 1]] || 0) ? -D[c] : D[c]), 0);
+    }
+    const h = String(ad).match(/[\s\-–]([a-z])$/i);
+    return h ? h[1].toLowerCase().charCodeAt(0) - 96 : null;
+}
+/** Listeyi yerinde sıralar; sırası olmayan, listede önündekinin hemen arkasında kalır (wiki ile aynı kural) */
+function yorungeyeGoreDiz(liste) {
+    let onceki = 0;
+    liste.forEach((x, i) => { x._k = x.sira === null ? onceki + 0.001 * (i + 1) : (onceki = x.sira); x._i = i; });
+    return liste.sort((a, b) => a._k - b._k || a._i - b._i);
 }
 const wikiUrl = (ad) => `wiki.html?madde=${encodeURIComponent(String(ad).trim().replace(/\s+/g, "_"))}`;
 const lyYaz = (x) => x.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -217,13 +236,15 @@ async function evreniYukle() {
             for (const m of dizin.maddeler || []) {
                 [m.ad, m.slug, m.ozellikler?.evren_adi, ...(m.aliases || [])].filter(Boolean)
                     .forEach(a => MADDELER.set(anahtar(a), m));
-                // Uydu notu: "sistem: [[Eminence]]", "gezegen: [[Eminence - IV]]"
-                if (m.tur === 'uydu' && m.ozellikler?.sistem) {
+                // Gezegen/uydu notu: "sistem: [[Eminence]]", uyduda ayrıca "gezegen: [[Eminence - IV]]"
+                if ((m.tur === 'gezegen' || m.tur === 'uydu') && m.ozellikler?.sistem) {
+                    const hedef = m.tur === 'gezegen' ? GEZEGEN_NOTLARI : UYDU_NOTLARI;
                     const k = anahtar(linkAdi(m.ozellikler.sistem));
-                    if (!UYDU_NOTLARI.has(k)) UYDU_NOTLARI.set(k, []);
-                    UYDU_NOTLARI.get(k).push({ ad: m.ad, gezegen: linkAdi(m.ozellikler.gezegen) });
+                    if (!hedef.has(k)) hedef.set(k, []);
+                    hedef.get(k).push({ ad: m.ad, gezegen: linkAdi(m.ozellikler.gezegen), sira: yorungeSirasi(m.ad, m.ozellikler.sira) });
                 }
             }
+            for (const liste of [...GEZEGEN_NOTLARI.values(), ...UYDU_NOTLARI.values()]) yorungeyeGoreDiz(liste);
         } catch (e) { /* dizin yoksa panel yine çalışır */ }
 
         const yildizHaritasi = new Map();
@@ -245,8 +266,7 @@ async function evreniYukle() {
             yildiz.position.set(sistem.x, sistem.z, sistem.y);
             
             yildiz.userData = {
-                isim: sistem.isim,
-                gezegenler: sistem.gezegenler
+                isim: sistem.isim
             };
             
             scene.add(yildiz);
@@ -449,6 +469,11 @@ function paneliKapat() {
     panel.hidden = true;
 }
 
+/** Sistemin gezegenleri: yalnızca yayınlanmış gezegen notlarından, yıldızdan uzaklık sırasıyla. [{ ad, sira }] */
+function sistemGezegenleri(s) {
+    return GEZEGEN_NOTLARI.get(anahtar(s.isim)) || [];
+}
+
 /** Sistemin uyduları: yalnızca yayınlanmış uydu notlarından ("sistem: [[Yıldız]]"). [{ ad, gezegen }] */
 function sistemUydulari(s) {
     return UYDU_NOTLARI.get(anahtar(s.isim)) || [];
@@ -466,7 +491,7 @@ function paneliDoldur(s) {
           (bag.etiket ? `<span class="yp-ebeveyn"> · ${esc(bag.etiket)}</span>` : '')
         : 'Bağımsız';
 
-    const gezegenler = (s.gezegenler || []).filter(Boolean);
+    const gezegenler = sistemGezegenleri(s).map(g => g.ad);
     const uydular = sistemUydulari(s);
     const cipler = (liste) => liste.map(g => `<li>${linkVeyaYazi(g)}</li>`).join('');
 
@@ -528,7 +553,7 @@ function aramaHazirla() {
     aramaKayitlari = [];
     for (const { sistem } of SISTEMLER.values()) {
         aramaKayitlari.push({ ad: sistem.isim, yildiz: sistem.isim, devlet: sistem.devlet, tur: 'yıldız' });
-        for (const g of (sistem.gezegenler || []).filter(Boolean))
+        for (const { ad: g } of sistemGezegenleri(sistem))
             aramaKayitlari.push({ ad: g, yildiz: sistem.isim, devlet: sistem.devlet, tur: 'gezegen' });
         for (const u of sistemUydulari(sistem))
             aramaKayitlari.push({ ad: u.ad, yildiz: sistem.isim, devlet: sistem.devlet, tur: 'uydu', gezegen: u.gezegen });

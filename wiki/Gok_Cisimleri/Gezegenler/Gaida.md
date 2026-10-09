@@ -1,0 +1,1 @@
+Yüzeyindeki toprakta yoğunlukla Kalsiyum Karbonat (CaCO3) bulunduğundan, bembeyaz görüntüsünü yer yer beliren yeşil ormanlar ve ufak az sayıda açık mavi okyanusları kaplayan Gaida, ==YYK kataloğuna== göre ==Az yoğunlukta== yaşama ev sahipliği yapmaktadır.
