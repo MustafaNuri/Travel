@@ -58,6 +58,13 @@
       "durum": "eklendi"
     },
     {
+      "baslik": "Yıldız Ateşeliği",
+      "url": "wiki.html?madde=Yıldız_Ateşeliği",
+      "tur": "devlet",
+      "tarih": "2026-10-09",
+      "durum": "eklendi"
+    },
+    {
       "baslik": "Üç Yıldız Şehirleri",
       "url": "wiki.html?madde=Üç_Yıldız_Şehirleri",
       "tur": "devlet",
@@ -91,13 +98,6 @@
       "tur": "yildiz",
       "tarih": "2026-10-08",
       "durum": "eklendi"
-    },
-    {
-      "baslik": "Kısım 1: Başlangıç",
-      "url": "roman.html#bolum-1",
-      "tur": "bolum",
-      "tarih": "2026-10-08",
-      "durum": "guncellendi"
     }
   ],
   "maddeler": [
@@ -329,6 +329,30 @@
       "imza": "55a30f1af217",
       "ilk_yayin": "2026-10-08",
       "son_degisim": "2026-10-08"
+    },
+    {
+      "ad": "Yıldız Ateşeliği",
+      "slug": "Yıldız_Ateşeliği",
+      "kategori": "Fraksiyonlar",
+      "dosya": "wiki/Fraksiyonlar/Yıldız_Ateşeliği.md",
+      "tur": "devlet",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "baskent": null,
+        "kurulus": null,
+        "kurucu": null,
+        "yonetim": null,
+        "lider": null,
+        "nufus": null,
+        "ekonomi": null
+      },
+      "baglantilar": [],
+      "ozet": "",
+      "klasor": "Yıldız Ateşeliği",
+      "imza": "8ba8daea8363",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
     }
   ],
   "yonetilen_dosyalar": [
@@ -339,6 +363,7 @@
     "wiki/Fraksiyonlar/Dış_Yerleşimler.md",
     "wiki/Fraksiyonlar/Merkez_Cumhuriyeti.md",
     "wiki/Fraksiyonlar/Pulsar_Koloni_Devleti.md",
+    "wiki/Fraksiyonlar/Yıldız_Ateşeliği.md",
     "wiki/Fraksiyonlar/Üç_Yıldız_Şehirleri.md",
     "wiki/Gok_Cisimleri/Gezegenler/Venno.md",
     "wiki/Gok_Cisimleri/Yildizlar/Eminence.md",
