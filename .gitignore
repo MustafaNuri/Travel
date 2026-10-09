@@ -5,3 +5,7 @@ Claude outputs/
 desktop.ini
 Thumbs.db
 __pycache__/
+
+# Claude ile ortak calisma notlari - OneDrive ile esitlenir, siteye gitmez
+PROJE_DURUMU.md
+PROJE_TALIMATLARI.md

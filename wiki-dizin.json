@@ -5,18 +5,18 @@
       "ad": "Başlangıç",
       "pov": "Tolya",
       "dosya": "roman/(1) Başlangıç (Tolya).md",
-      "imza": "1832c746a051",
+      "imza": "464efd993f9c",
       "ilk_yayin": "2026-08-21",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "no": 2,
       "ad": "Aforoz",
       "pov": "Kina",
       "dosya": "roman/(2) Aforoz (Kina).md",
-      "imza": "33f5400527ca",
+      "imza": "e9d05588b643",
       "ilk_yayin": "2026-08-27",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "no": 3,
@@ -62,74 +62,74 @@
   ],
   "son_eklenenler": [
     {
-      "baslik": "Daytona Rejimi",
-      "url": "wiki.html?madde=Daytona_Rejimi",
-      "tur": "devlet",
-      "tarih": "2026-10-09",
-      "durum": "eklendi"
-    },
-    {
-      "baslik": "Dış Yerleşimler",
-      "url": "wiki.html?madde=Dış_Yerleşimler",
-      "tur": "devlet",
-      "tarih": "2026-10-09",
-      "durum": "eklendi"
-    },
-    {
-      "baslik": "Merkez Cumhuriyeti",
-      "url": "wiki.html?madde=Merkez_Cumhuriyeti",
-      "tur": "devlet",
-      "tarih": "2026-10-09",
-      "durum": "eklendi"
-    },
-    {
       "baslik": "Pulsar Koloni Devleti",
       "url": "wiki.html?madde=Pulsar_Koloni_Devleti",
       "tur": "devlet",
-      "tarih": "2026-10-09",
-      "durum": "eklendi"
-    },
-    {
-      "baslik": "Yıldız Ateşeliği",
-      "url": "wiki.html?madde=Yıldız_Ateşeliği",
-      "tur": "devlet",
-      "tarih": "2026-10-09",
-      "durum": "eklendi"
-    },
-    {
-      "baslik": "Üç Yıldız Şehirleri",
-      "url": "wiki.html?madde=Üç_Yıldız_Şehirleri",
-      "tur": "devlet",
-      "tarih": "2026-10-09",
-      "durum": "eklendi"
+      "tarih": "2026-10-10",
+      "durum": "guncellendi"
     },
     {
       "baslik": "Dünya",
       "url": "wiki.html?madde=Dünya",
       "tur": "gezegen",
-      "tarih": "2026-10-09",
-      "durum": "eklendi"
-    },
-    {
-      "baslik": "Eminence - IV",
-      "url": "wiki.html?madde=Eminence_-_IV",
-      "tur": "gezegen",
-      "tarih": "2026-10-09",
-      "durum": "eklendi"
-    },
-    {
-      "baslik": "Erendil",
-      "url": "wiki.html?madde=Erendil",
-      "tur": "gezegen",
-      "tarih": "2026-10-09",
-      "durum": "eklendi"
+      "tarih": "2026-10-10",
+      "durum": "guncellendi"
     },
     {
       "baslik": "Gaida",
       "url": "wiki.html?madde=Gaida",
       "tur": "gezegen",
-      "tarih": "2026-10-09",
-      "durum": "eklendi"
+      "tarih": "2026-10-10",
+      "durum": "guncellendi"
+    },
+    {
+      "baslik": "Jüpiter",
+      "url": "wiki.html?madde=Jüpiter",
+      "tur": "gezegen",
+      "tarih": "2026-10-10",
+      "durum": "guncellendi"
+    },
+    {
+      "baslik": "Locket",
+      "url": "wiki.html?madde=Locket",
+      "tur": "gezegen",
+      "tarih": "2026-10-10",
+      "durum": "guncellendi"
+    },
+    {
+      "baslik": "Luna",
+      "url": "wiki.html?madde=Luna",
+      "tur": "uydu",
+      "tarih": "2026-10-10",
+      "durum": "guncellendi"
+    },
+    {
+      "baslik": "Mars",
+      "url": "wiki.html?madde=Mars",
+      "tur": "gezegen",
+      "tarih": "2026-10-10",
+      "durum": "guncellendi"
+    },
+    {
+      "baslik": "Merkür",
+      "url": "wiki.html?madde=Merkür",
+      "tur": "gezegen",
+      "tarih": "2026-10-10",
+      "durum": "guncellendi"
+    },
+    {
+      "baslik": "Neptün",
+      "url": "wiki.html?madde=Neptün",
+      "tur": "gezegen",
+      "tarih": "2026-10-10",
+      "durum": "guncellendi"
+    },
+    {
+      "baslik": "Satürn",
+      "url": "wiki.html?madde=Satürn",
+      "tur": "gezegen",
+      "tarih": "2026-10-10",
+      "durum": "guncellendi"
     }
   ],
   "maddeler": [
@@ -232,7 +232,7 @@
       "aliases": [],
       "ozellikler": {
         "sistem": "[[Sol]]",
-        "sira": 3,
+        "sira": "3",
         "renk": "#0ca7fa",
         "sinif": "kayalık",
         "halka": null
@@ -242,9 +242,9 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "54f7f09238b5",
+      "imza": "80b47b138286",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Eminence",
@@ -330,7 +330,7 @@
       "aliases": [],
       "ozellikler": {
         "sistem": "[[Eminence]]",
-        "sira": 2,
+        "sira": "2",
         "renk": "#fffeeb",
         "sinif": "süper dünya",
         "halka": null,
@@ -341,9 +341,9 @@
       ],
       "ozet": "Yüzeyindeki toprakta yoğunlukla Kalsiyum Karbonat (CaCO3) bulunduğundan, bembeyaz görüntüsünü yer yer beliren yeşil ormanlar ve ufak az sayıda açık mavi okyanusları kaplayan Gaida, YYK kataloğuna göre Az yoğunlukta yaşam…",
       "klasor": null,
-      "imza": "3fc8705089e1",
+      "imza": "472a99bdddda",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Jüpiter",
@@ -357,16 +357,16 @@
         "sinif": "gaz devi",
         "halka": null,
         "sistem": "[[Sol]]",
-        "sira": 5
+        "sira": "5"
       },
       "baglantilar": [
         "Sol"
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "fb29f6a157da",
+      "imza": "08a3d16fdd77",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Locket",
@@ -378,7 +378,7 @@
       "aliases": [],
       "ozellikler": {
         "sistem": "[[Andia]]",
-        "sira": 3,
+        "sira": "3",
         "renk": "#47ab11",
         "sinif": "kayalık",
         "halka": null
@@ -388,9 +388,9 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "e2e673914528",
+      "imza": "d4653c28eee2",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Luna",
@@ -403,7 +403,7 @@
       "ozellikler": {
         "sistem": "[[Sol]]",
         "gezegen": "[[Dünya]]",
-        "sira": 1,
+        "sira": "1",
         "renk": null,
         "sinif": "kayalık",
         "halka": null
@@ -414,9 +414,9 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "af68227053a7",
+      "imza": "c17155c2bc3e",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Mars",
@@ -428,7 +428,7 @@
       "aliases": [],
       "ozellikler": {
         "sistem": "[[Sol]]",
-        "sira": 4,
+        "sira": "4",
         "renk": "#c46231",
         "sinif": "kayalık",
         "halka": null
@@ -438,9 +438,9 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "636e86fb8ea7",
+      "imza": "dc71835612fe",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Merkez Cumhuriyeti",
@@ -476,7 +476,7 @@
       "aliases": [],
       "ozellikler": {
         "sistem": "[[Sol]]",
-        "sira": 1,
+        "sira": "1",
         "renk": "#969696",
         "sinif": "kayalık",
         "halka": null
@@ -486,9 +486,9 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "308309d82262",
+      "imza": "a4addba209e7",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Neptün",
@@ -500,7 +500,7 @@
       "aliases": [],
       "ozellikler": {
         "sistem": "[[Sol]]",
-        "sira": 8,
+        "sira": "8",
         "renk": "#0068de",
         "sinif": "buz devi",
         "halka": null
@@ -510,9 +510,9 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "0d5706eff075",
+      "imza": "2eefab5dd012",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Pulsar Koloni Devleti",
@@ -524,7 +524,7 @@
       "aliases": [],
       "ozellikler": {
         "baskent": null,
-        "kurulus": 2208,
+        "kurulus": "2208",
         "kurucu": "[[Arya Tomokazu]]",
         "yonetim": null,
         "lider": null,
@@ -552,9 +552,9 @@
       ],
       "ozet": "Merkez Cumhuriyeti'nden sonra kurulan ilk büyük çaplı yıldızlararası devlet olan Pulsar Koloni Devleti, 2208 yılında Arya Tomokazu tarafından Andia, Kito ve Penton yıldızlarını barındıracak şekilde kurulmuştur. İlerleyen…",
       "klasor": "Pulsar Koloni Devleti",
-      "imza": "1cd5966a2000",
+      "imza": "f7a5cbffd5af",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Satürn",
@@ -566,7 +566,7 @@
       "aliases": [],
       "ozellikler": {
         "sistem": "[[Sol]]",
-        "sira": 6,
+        "sira": "6",
         "renk": "#f7c923",
         "sinif": "gaz devi",
         "halka": "#f7d352"
@@ -576,9 +576,9 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "4d3185d31be7",
+      "imza": "7b0a9bb05d50",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Tau Ceti",
@@ -607,7 +607,7 @@
       "ozellikler": {
         "sistem": "[[Sol]]",
         "gezegen": "[[Satürn]]",
-        "sira": 1,
+        "sira": "1",
         "renk": "#ebc923",
         "sinif": "kayalık",
         "halka": null
@@ -618,9 +618,9 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "d85aa37475b2",
+      "imza": "1f705bc230c2",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Üç Yıldız Şehirleri",
@@ -656,7 +656,7 @@
       "aliases": [],
       "ozellikler": {
         "sistem": "[[Sol]]",
-        "sira": 7,
+        "sira": "7",
         "renk": "#52c3f7",
         "sinif": "buz devi",
         "halka": "#52c3f7"
@@ -666,9 +666,9 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "68add7c01c33",
+      "imza": "df068a237630",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Venno",
@@ -710,7 +710,7 @@
       "aliases": [],
       "ozellikler": {
         "sistem": "[[Sol]]",
-        "sira": 2,
+        "sira": "2",
         "renk": "#d4a420",
         "sinif": "kayalık",
         "halka": null
@@ -720,9 +720,9 @@
       ],
       "ozet": "",
       "klasor": null,
-      "imza": "61e531602d6b",
+      "imza": "5606261b699c",
       "ilk_yayin": "2026-10-09",
-      "son_degisim": "2026-10-09"
+      "son_degisim": "2026-10-10"
     },
     {
       "ad": "Yıldız Ateşeliği",
