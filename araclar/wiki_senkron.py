@@ -33,7 +33,7 @@ from pathlib import Path
 # orada birden fazla yol varsa yanlış kopyayı okumamak için durur ve size sorar.
 BILGISAYAR_VAULT = {
     "NURI": r"C:\Users\musta\Documents\a\Roman",   # iş bilgisayarı
-    # "EV-BILGISAYARI-ADI": r"D:\Roman\The Travel",   # ev bilgisayarı: adını betik ilk çalışmada söyler
+    "DESKTOP-8HA5V59": r"D:\Roman\The Travel",   # ev bilgisayarı
 }
 VAULT_ADAYLARI = [
     r"C:\Users\musta\Documents\a\Roman",   # iş bilgisayarı
