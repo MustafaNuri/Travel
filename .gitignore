@@ -1,0 +1,7 @@
+# Claude'un ekran goruntuleri vb. - bilgisayarda kalir, siteye gitmez
+Claude outputs/
+
+# Windows / OneDrive / Python artiklari
+desktop.ini
+Thumbs.db
+__pycache__/

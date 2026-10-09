@@ -34,6 +34,8 @@ if errorlevel 1 (
 )
 
 echo.
+rem --- Claude outputs klasoru GitHub'a gitmez (.gitignore); daha once gittiyse takipten cikar ---
+git rm -r --cached --quiet --ignore-unmatch "Claude outputs" >nul 2>&1
 echo === 2/3 Degisen dosyalar ===
 git status --short
 echo.
