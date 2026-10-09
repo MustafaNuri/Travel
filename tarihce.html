@@ -35,23 +35,32 @@
     </div>
 
     <script>
-        const bolumler = [
-            { id: "bolum-1", dosya: "tarihce/current_galaxy_state.md", isim: "Galaksinin Kısa Tarihi" },
-            { id: "bolum-2", dosya: "tarihce/ikinci-bolum.md", isim: "Anahtar Çatışması" },
-            { id: "bolum-3", dosya: "tarihce/ucuncu-bolum.md", isim: "İkilerin Anlaşması" }
-        ];
+        // Tarihçe bölümleri wiki-dizin.json'dan gelir (senkron betiği, Obsidian'daki Tarihçe klasöründe
+        // "yayinla: true" olan notları yazar; sırayı "sira", adı "baslik" alanı belirler)
+        async function bolumleriGetir() {
+            try {
+                const yanit = await fetch('wiki-dizin.json');
+                const dizin = yanit.ok ? await yanit.json() : {};
+                return (dizin.tarihce || []).map(t => ({ id: `bolum-${t.no}`, dosya: t.dosya, isim: t.ad }));
+            } catch (hata) {
+                console.error("wiki-dizin.json okunamadı:", hata);
+                return [];
+            }
+        }
 
         async function sayfalariYukle() {
             const menu = document.getElementById('tarihce-menu');
             const icerik = document.getElementById('md-icerik');
+            const bolumler = await bolumleriGetir();
             await WikiLink.yukle();   // hangi maddelerin yazıldığını öğren
 
             for (const bolum of bolumler) {
                 menu.innerHTML += `<li><a href="#${bolum.id}" id="link-${bolum.id}">${bolum.isim}</a></li>`;
                 
                 try {
-                    let yanit = await fetch(bolum.dosya);
-                    let metin = yanit.ok ? await yanit.text() : `<p>Burası şimdilik boş.</p>`;
+                    let yanit = await fetch(encodeURI(bolum.dosya));
+                    let metin = yanit.ok ? await yanit.text() : "";
+                    if (!metin.trim()) metin = `<p>Burası şimdilik boş.</p>`;
                     
                     // Obsidian linkleri: yazılmış maddeye link, yazılmamışa noktalı altı çizili yazı (wiki-link.js)
                     metin = WikiLink.cevir(metin);

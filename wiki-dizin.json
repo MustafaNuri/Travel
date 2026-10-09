@@ -5,27 +5,59 @@
       "ad": "Başlangıç",
       "pov": "Tolya",
       "dosya": "roman/(1) Başlangıç (Tolya).md",
-      "imza": "bb1cff3dbad4",
+      "imza": "919163bec1d6",
       "ilk_yayin": "2026-08-21",
-      "son_degisim": "2026-10-08"
+      "son_degisim": "2026-10-09"
     },
     {
       "no": 2,
       "ad": "Aforoz",
       "pov": "Kina",
       "dosya": "roman/(2) Aforoz (Kina).md",
-      "imza": "4630d365418e",
+      "imza": "5579fd0c05d4",
       "ilk_yayin": "2026-08-27",
-      "son_degisim": "2026-10-08"
+      "son_degisim": "2026-10-09"
     },
     {
       "no": 3,
       "ad": "Teklif ve Fırsat",
       "pov": "Heng",
       "dosya": "roman/(3) Teklif ve Fırsat (Heng).md",
-      "imza": "5edbdc61cb32",
+      "imza": "f879a7f49551",
       "ilk_yayin": "2026-08-19",
-      "son_degisim": "2026-08-19"
+      "son_degisim": "2026-10-09"
+    }
+  ],
+  "tarihce": [
+    {
+      "no": 1,
+      "ad": "Galaksinin Kısa Tarihi",
+      "not": "Yolculuk Başladığında Galaksinin durumu",
+      "dosya": "tarihce/Yolculuk_Başladığında_Galaksinin_durumu.md",
+      "bos": false,
+      "imza": "c9448577c05d",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "no": 2,
+      "ad": "Anahtar Çatışması",
+      "not": "Anahtar Çatışması (Tarihçe)",
+      "dosya": "tarihce/Anahtar_Çatışması_(Tarihçe).md",
+      "bos": true,
+      "imza": "325684c0e5ff",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "no": 3,
+      "ad": "İkilerin Anlaşması",
+      "not": "İkilerin Anlaşması (Tarihçe)",
+      "dosya": "tarihce/İkilerin_Anlaşması_(Tarihçe).md",
+      "bos": true,
+      "imza": "b2da2e7e1236",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
     }
   ],
   "son_eklenenler": [
@@ -72,32 +104,32 @@
       "durum": "eklendi"
     },
     {
-      "baslik": "Venno",
-      "url": "wiki.html?madde=Venno",
-      "tur": "uydu",
-      "tarih": "2026-10-08",
+      "baslik": "Tarihçe: Galaksinin Kısa Tarihi",
+      "url": "tarihce.html#bolum-1",
+      "tur": "tarihce",
+      "tarih": "2026-10-09",
       "durum": "eklendi"
     },
     {
-      "baslik": "Antimadde Motoru",
-      "url": "wiki.html?madde=Antimadde_Motoru",
-      "tur": "teknoloji",
-      "tarih": "2026-10-08",
-      "durum": "eklendi"
+      "baslik": "Kısım 1: Başlangıç",
+      "url": "roman.html#bolum-1",
+      "tur": "bolum",
+      "tarih": "2026-10-09",
+      "durum": "guncellendi"
     },
     {
-      "baslik": "Eminence",
-      "url": "wiki.html?madde=Eminence",
-      "tur": "yildiz",
-      "tarih": "2026-10-08",
-      "durum": "eklendi"
+      "baslik": "Kısım 2: Aforoz",
+      "url": "roman.html#bolum-2",
+      "tur": "bolum",
+      "tarih": "2026-10-09",
+      "durum": "guncellendi"
     },
     {
-      "baslik": "Tau Ceti",
-      "url": "wiki.html?madde=Tau_Ceti",
-      "tur": "yildiz",
-      "tarih": "2026-10-08",
-      "durum": "eklendi"
+      "baslik": "Kısım 3: Teklif ve Fırsat",
+      "url": "roman.html#bolum-3",
+      "tur": "bolum",
+      "tarih": "2026-10-09",
+      "durum": "guncellendi"
     }
   ],
   "maddeler": [
@@ -359,6 +391,9 @@
     "roman/(1) Başlangıç (Tolya).md",
     "roman/(2) Aforoz (Kina).md",
     "roman/(3) Teklif ve Fırsat (Heng).md",
+    "tarihce/Anahtar_Çatışması_(Tarihçe).md",
+    "tarihce/Yolculuk_Başladığında_Galaksinin_durumu.md",
+    "tarihce/İkilerin_Anlaşması_(Tarihçe).md",
     "wiki/Fraksiyonlar/Daytona_Rejimi.md",
     "wiki/Fraksiyonlar/Dış_Yerleşimler.md",
     "wiki/Fraksiyonlar/Merkez_Cumhuriyeti.md",

@@ -16,6 +16,10 @@ Bir notta yapılanlar:
   * "Yazar Notları" başlığından sonrası siteye GİTMEZ.
   * %% yorumlar %% ve ```dataview``` blokları silinir.
   * Geri kalan metin wiki/<kategori>/<Not_Adi>.md olarak yazılır.
+
+Tarihçe klasörü wiki maddesi değildir: oradaki notlar tarihce.html'in bölümleridir.
+Notta "sira: 1" (sayfadaki sıra) ve "baslik: ..." (görünen ad) alanları olur;
+"yayinla: true" olanlar sitenin tarihce/ klasörüne kopyalanır.
 """
 import argparse
 import hashlib
@@ -51,7 +55,6 @@ KATEGORI_HARITASI = {
     "Şehirler": "Sehirler",
     "Olaylar ve Sonuçlar": "Olaylar",
     "Yiyecek, içecek, bitki, hayvanlar": "Doga",
-    "Tarihçe": "Tarihce",
 }
 # Bu klasörlerdeki hiçbir not siteye gitmez
 HARIC_KLASORLER = {"00_Roman", "YY Planlama", "ZZ dosyalar", "Haritalar"}
@@ -59,6 +62,8 @@ HARIC_KLASORLER = {"00_Roman", "YY Planlama", "ZZ dosyalar", "Haritalar"}
 # Notta "yayinla: true" varsa bölüm sitenin roman/ klasörüne kopyalanır.
 ROMAN_KLASORU = "00_Roman/Uzay_Yolculugu"
 BOLUM_ADI = r"^\((\d+)\)\s*(.+?)\s*\(([^)]+)\)$"
+# Tarihçe sayfasının bölümleri: bu klasördeki notlar (sira + baslik alanlarıyla)
+TARIHCE_KLASORU = "Tarihçe"
 VARSAYILAN_KATEGORI = "Diger"
 
 # Otomatik etiketleme: bu klasörlerde "yayinla" alanı olmayan bir not bulunursa
@@ -292,7 +297,48 @@ def bolumleri_oku(site, eski_bolumler):
     return sorted(bolumler, key=lambda b: b["no"])
 
 
-def akis_olustur(maddeler, bolumler, adet=10):
+def tarihceyi_yayinla(vault, site, etiketlenen, eski_tarihce):
+    """Tarihçe klasöründeki notlardan yayinla: true olanları site/tarihce/ klasörüne kopyalar.
+    Her not tarihce.html'de bir bölümdür: 'sira' sırasını, 'baslik' görünen adını belirler."""
+    klasor = vault / TARIHCE_KLASORU
+    bolumler, yazilan, degisen = [], [], 0
+    if not klasor.is_dir():
+        return bolumler, yazilan, degisen
+    for dosya in sorted(klasor.glob("*.md")):
+        ad = nfc(dosya.stem)
+        metin = dosya.read_bytes().decode("utf-8", errors="replace")
+        fm, govde = frontmatter_ayir(metin)
+        if "yayinla" not in fm:
+            eklenen = yayin_alani_ekle(dosya, fm, "tarihce")
+            etiketlenen.append((f"{TARIHCE_KLASORU}/{ad}.md", ", ".join(eklenen)))
+            continue   # yeni etiketlenen not taslaktır (yayinla: false)
+        if fm.get("yayinla") is not True:
+            continue
+        try:
+            sira = int(str(fm.get("sira")).strip())
+        except (TypeError, ValueError):
+            sira = None
+        hedef_goreli = "tarihce/" + re.sub(r"\s+", "_", ad) + ".md"
+        temiz = govdeyi_temizle(govde)
+        if dosya_yaz_baglantisiz(site / hedef_goreli, temiz):
+            degisen += 1
+        yazilan.append(hedef_goreli)
+        b = {"no": sira, "ad": str(fm.get("baslik") or ad).strip(), "not": ad, "dosya": hedef_goreli,
+             "bos": not temiz.strip()}
+        tarihleri_belirle(b, eski_tarihce.get(ad, {}), imza(temiz, b["ad"]), BUGUN)
+        bolumler.append(b)
+    # Sırası yazılmamış ya da aynı sırayı kullanan bölümler sona eklenir
+    kullanilan = set()
+    for b in sorted(bolumler, key=lambda b: (b["no"] is None, b["no"] or 0, b["not"])):
+        if b["no"] is None or b["no"] in kullanilan:
+            yeni = max(kullanilan | {0}) + 1
+            print(f"  ! Tarihçe: '{b['not']}' notunda geçerli/benzersiz 'sira' yok, {yeni}. sıraya kondu")
+            b["no"] = yeni
+        kullanilan.add(b["no"])
+    return sorted(bolumler, key=lambda b: b["no"]), yazilan, degisen
+
+
+def akis_olustur(maddeler, bolumler, adet=10, tarihce=()):
     """'Son eklenenler' listesi: en son eklenen ya da güncellenen maddeler ve bölümler."""
     akis = []
     for m in maddeler:
@@ -301,6 +347,11 @@ def akis_olustur(maddeler, bolumler, adet=10):
     for b in bolumler:
         akis.append({"baslik": f"Kısım {b['no']}: {b['ad']}", "url": f"roman.html#bolum-{b['no']}", "tur": "bolum",
                      "tarih": b["son_degisim"], "durum": "eklendi" if b["son_degisim"] == b["ilk_yayin"] else "guncellendi"})
+    for t in tarihce:
+        if t.get("bos"):
+            continue   # henüz yazılmamış bölüm "son eklenenler"e girmez
+        akis.append({"baslik": f"Tarihçe: {t['ad']}", "url": f"tarihce.html#bolum-{t['no']}", "tur": "tarihce",
+                     "tarih": t["son_degisim"], "durum": "eklendi" if t["son_degisim"] == t["ilk_yayin"] else "guncellendi"})
     akis.sort(key=lambda a: (a["tarih"], a["durum"] == "eklendi"), reverse=True)
     return akis[:adet]
 
@@ -350,6 +401,7 @@ def main():
     eski_yonetilen = set(eski_dizin.get("yonetilen_dosyalar", []))
     eski_maddeler = {m["ad"]: m for m in eski_dizin.get("maddeler", [])}
     eski_bolumler = {b["no"]: b for b in eski_dizin.get("bolumler", [])}
+    eski_tarihce = {t["not"]: t for t in eski_dizin.get("tarihce", []) if t.get("not")}
 
     tum_not_adlari = set()
     maddeler, yazilan, degisen = [], [], 0
@@ -362,6 +414,8 @@ def main():
             continue
         ad = nfc(dosya.stem)
         tum_not_adlari.add(anahtar(ad))
+        if parcalar[0] == TARIHCE_KLASORU:
+            continue   # tarihçe notları aşağıda ayrıca işlenir (wiki maddesi değil)
         try:
             metin = dosya.read_text("utf-8")
         except UnicodeDecodeError:
@@ -410,6 +464,10 @@ def main():
     bolum_yazilan, bolum_degisen = bolumleri_yayinla(vault, site, etiketlenen)
     yazilan += bolum_yazilan
 
+    # Tarihçe bölümleri
+    tarihce, tarihce_yazilan, tarihce_degisen = tarihceyi_yayinla(vault, site, etiketlenen, eski_tarihce)
+    yazilan += tarihce_yazilan
+
     # Artık yayınlanmayan (daha önce bu betiğin yazdığı) dosyaları kaldır
     silinen = 0
     for eski in eski_yonetilen - set(yazilan):
@@ -429,7 +487,8 @@ def main():
     bolumler = bolumleri_oku(site, eski_bolumler)
     dizin = {
         "bolumler": bolumler,
-        "son_eklenenler": akis_olustur(maddeler, bolumler),
+        "tarihce": tarihce,
+        "son_eklenenler": akis_olustur(maddeler, bolumler, tarihce=tarihce),
         "maddeler": sorted(maddeler, key=lambda m: anahtar(m["ad"])),
         "yonetilen_dosyalar": sorted(yazilan),
     }
@@ -445,6 +504,9 @@ def main():
     print(f"Yayınlanan bölüm: {len(bolum_yazilan)}  (değişen: {bolum_degisen})")
     for b in bolum_yazilan:
         print(f"  + {b}")
+    print(f"Yayınlanan tarihçe bölümü: {len(tarihce)}  (değişen: {tarihce_degisen})")
+    for t in tarihce:
+        print(f"  + {t['no']}. {t['ad']}" + ("  (henüz boş)" if t["bos"] else ""))
     print(f"Yayınlanan madde: {len(maddeler)}  (değişen: {degisen}, kaldırılan: {silinen})")
     for m in maddeler:
         print(f"  + {m['ad']}  ->  {m['dosya']}")

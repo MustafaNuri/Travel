@@ -10,7 +10,7 @@
         "Uydular": ["Ay (Dünya)"]
         },
         {
-        "isim": "Alfa Centauri A/B",
+        "isim": "Alfa Centauri",
         "x": 1.63, "y": 1.37, "z": -3.82,
         "devlet": "Merkez Cumhuriyeti",
         "tip": "G/K",
@@ -58,7 +58,7 @@
         "gezegenler": []
         },
         {
-        "isim": "Peranza",
+        "isim": "Perenza",
         "x": 11, "y": 2.5, "z": -7.2,
         "devlet": "Merkez Cumhuriyeti",
         "tip": "G",
@@ -159,7 +159,7 @@
         "devlet": "Daytona Rejimi",
         "tip": "M",
         "renk": "#ff4422",
-        "gezegenler": ["Wolf 359 b", "Wolf 359 c"]
+        "gezegenler": ["Wolf 359 - I", "Wolf 359 - II"]
         },
         {
         "isim": "Daytona",
@@ -189,7 +189,7 @@
         "isim": "Andia",
         "x": -6.1, "y": 2.2, "z": -6.2,
         "devlet": "Pulsar Koloni Devleti",
-        "tip": "M",
+        "tip": "K",
         "renk": "#ff9944",
         "gezegenler": ["Locket"]
         },
@@ -410,11 +410,11 @@
         "gezegenler": []
         },
         {
-        "isim": "Barnard Star",
+        "isim": "Barnard's Star",
         "x": -0.16, "y": -5.92, "z": 0.49,
         "tip": "M",
         "renk": "#ff4422",
-        "gezegenler": ["Barnard b"]
+        "gezegenler": ["Barnard's Star - I"]
         },
         {
         "isim": "Sintonia",
@@ -442,14 +442,14 @@
 
         ],
         "baglantilar": [
-        { "yildiz1": "Sol", "yildiz2": "Alfa Centauri A/B" },
-        { "yildiz1": "Alfa Centauri A/B", "yildiz2": "Yomria" },
-        { "yildiz1": "Alfa Centauri A/B", "yildiz2": "Schrodinger" },
+        { "yildiz1": "Sol", "yildiz2": "Alfa Centauri" },
+        { "yildiz1": "Alfa Centauri", "yildiz2": "Yomria" },
+        { "yildiz1": "Alfa Centauri", "yildiz2": "Schrodinger" },
         { "yildiz1": "Yomria", "yildiz2": "Baiola" },
         { "yildiz1": "Baiola", "yildiz2": "Dinia" },
-        { "yildiz1": "Baiola", "yildiz2": "Peranza" },
-        { "yildiz1": "Peranza", "yildiz2": "Henya" },
-        { "yildiz1": "Peranza", "yildiz2": "Dinia" },
+        { "yildiz1": "Baiola", "yildiz2": "Perenza" },
+        { "yildiz1": "Perenza", "yildiz2": "Henya" },
+        { "yildiz1": "Perenza", "yildiz2": "Dinia" },
         { "yildiz1": "Henya", "yildiz2": "Tau Ceti" },
         { "yildiz1": "Tau Ceti", "yildiz2": "Bernoulli" },
         { "yildiz1": "Bernoulli", "yildiz2": "Epsilon Eridani" },
@@ -463,7 +463,7 @@
         { "yildiz1": "Eminence", "yildiz2": "Sirius" },
         { "yildiz1": "Gena", "yildiz2": "Procyon" },
         { "yildiz1": "Berona", "yildiz2": "Procyon" },
-        { "yildiz1": "Barnard Star", "yildiz2": "Sintonia"},
+        { "yildiz1": "Barnard's Star", "yildiz2": "Sintonia"},
         { "yildiz1": "Daytona", "yildiz2": "Wolf 359"},
         { "yildiz1": "Tadil", "yildiz2": "Wolf 359"},
         { "yildiz1": "Daytona", "yildiz2": "Tadil"},
@@ -479,7 +479,7 @@
         { "yildiz1": "Beta Zemura", "yildiz2": "Nehir"},
         { "yildiz1": "Alfa Zemura", "yildiz2": "Beta Zemura"},
         { "yildiz1": "Gama Kefir", "yildiz2": "Selton"},
-        { "yildiz1": "Barnard Star", "yildiz2": "Sol"},
+        { "yildiz1": "Barnard's Star", "yildiz2": "Sol"},
         { "yildiz1": "Ipsiya", "yildiz2": "Nehir"},
         { "yildiz1": "Ipsiya", "yildiz2": "Nira"},
         { "yildiz1": "Gliese 581", "yildiz2": "Nira"},
