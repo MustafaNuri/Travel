@@ -104,6 +104,13 @@
       "durum": "eklendi"
     },
     {
+      "baslik": "Ay",
+      "url": "wiki.html?madde=Ay",
+      "tur": "uydu",
+      "tarih": "2026-10-09",
+      "durum": "eklendi"
+    },
+    {
       "baslik": "Tarihçe: Galaksinin Kısa Tarihi",
       "url": "tarihce.html#bolum-1",
       "tur": "tarihce",
@@ -120,13 +127,6 @@
     {
       "baslik": "Kısım 2: Aforoz",
       "url": "roman.html#bolum-2",
-      "tur": "bolum",
-      "tarih": "2026-10-09",
-      "durum": "guncellendi"
-    },
-    {
-      "baslik": "Kısım 3: Teklif ve Fırsat",
-      "url": "roman.html#bolum-3",
       "tur": "bolum",
       "tarih": "2026-10-09",
       "durum": "guncellendi"
@@ -157,6 +157,30 @@
       "imza": "00a373bef6db",
       "ilk_yayin": "2026-10-08",
       "son_degisim": "2026-10-08"
+    },
+    {
+      "ad": "Ay",
+      "slug": "Ay",
+      "kategori": "Gok_Cisimleri/Gezegenler",
+      "dosya": "wiki/Gok_Cisimleri/Gezegenler/Ay.md",
+      "tur": "uydu",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {
+        "sistem": "[[Sol]]",
+        "gezegen": "[[Dünya]]",
+        "renk": null,
+        "boyut": null
+      },
+      "baglantilar": [
+        "Sol",
+        "Dünya"
+      ],
+      "ozet": "",
+      "klasor": null,
+      "imza": "956446e463a6",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
     },
     {
       "ad": "Daytona Rejimi",
@@ -403,6 +427,7 @@
     "wiki/Fraksiyonlar/Pulsar_Koloni_Devleti.md",
     "wiki/Fraksiyonlar/Yıldız_Ateşeliği.md",
     "wiki/Fraksiyonlar/Üç_Yıldız_Şehirleri.md",
+    "wiki/Gok_Cisimleri/Gezegenler/Ay.md",
     "wiki/Gok_Cisimleri/Gezegenler/Venno.md",
     "wiki/Gok_Cisimleri/Yildizlar/Eminence.md",
     "wiki/Gok_Cisimleri/Yildizlar/Tau_Ceti.md",

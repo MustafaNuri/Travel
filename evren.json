@@ -21,8 +21,7 @@
         "devlet": "Merkez Cumhuriyeti",
         "tip": "G",
         "renk": "#ffdd44",
-        "gezegenler": ["Dünya", "Mars"],
-        "Uydular": ["Ay (Dünya)"]
+        "gezegenler": ["Dünya", "Mars"]
         },
         {
         "isim": "Alfa Centauri",

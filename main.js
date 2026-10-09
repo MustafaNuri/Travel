@@ -35,6 +35,7 @@ const devletHaritasi = new Map();
 const SISTEMLER = new Map();   // isim -> { sistem, mesh, etiket }
 const KOMSULAR = new Map();    // isim -> [{ isim, mesafe }]
 const ESLER = new Map();       // çift sistemler: isim -> eşinin adı (evren.json "ciftler")
+const UYDU_NOTLARI = new Map(); // yıldız anahtarı -> [{ ad, gezegen }] (yayınlanmış uydu maddeleri)
 const MADDELER = new Map();    // anahtar -> yayınlanmış wiki maddesi (wiki-dizin.json)
 let DEVLET_RENK = {};
 const SINIF_AD = { O: "Mavi dev", B: "Mavi-beyaz yıldız", A: "Beyaz yıldız", F: "Sarı-beyaz yıldız", G: "Sarı cüce", K: "Turuncu cüce", M: "Kırmızı cüce" };
@@ -81,9 +82,16 @@ async function evreniYukle() {
         // Yayınlanmış wiki maddeleri (varsa panelde özet ve linkler için)
         try {
             const dizin = await (await fetch('wiki-dizin.json')).json();
+            const linkAdi = (v) => v ? String(v).replace(/^\[\[|\]\]$/g, '').split('|')[0].trim() : '';
             for (const m of dizin.maddeler || []) {
                 [m.ad, m.slug, m.ozellikler?.evren_adi, ...(m.aliases || [])].filter(Boolean)
                     .forEach(a => MADDELER.set(anahtar(a), m));
+                // Uydu notu: "sistem: [[Eminence]]", "gezegen: [[Eminence - IV]]"
+                if (m.tur === 'uydu' && m.ozellikler?.sistem) {
+                    const k = anahtar(linkAdi(m.ozellikler.sistem));
+                    if (!UYDU_NOTLARI.has(k)) UYDU_NOTLARI.set(k, []);
+                    UYDU_NOTLARI.get(k).push({ ad: m.ad, gezegen: linkAdi(m.ozellikler.gezegen) });
+                }
             }
         } catch (e) { /* dizin yoksa panel yine çalışır */ }
 
@@ -301,6 +309,11 @@ function paneliKapat() {
     panel.hidden = true;
 }
 
+/** Sistemin uyduları: yalnızca yayınlanmış uydu notlarından ("sistem: [[Yıldız]]"). [{ ad, gezegen }] */
+function sistemUydulari(s) {
+    return UYDU_NOTLARI.get(anahtar(s.isim)) || [];
+}
+
 function paneliDoldur(s) {
     const tip = s.tip ? String(s.tip) : '';
     const tipler = tip.split('/').map(t => t.trim()).filter(Boolean);
@@ -312,7 +325,7 @@ function paneliDoldur(s) {
         : 'Bağımsız';
 
     const gezegenler = (s.gezegenler || []).filter(Boolean);
-    const uydular = (s.Uydular || []).filter(Boolean);
+    const uydular = sistemUydulari(s);
     const cipler = (liste) => liste.map(g => `<li>${linkVeyaYazi(g)}</li>`).join('');
 
     // Çift sistemde eşlerin Vermis bağlantıları ortaktır; mesafe bu yıldızın kendi konumundan ölçülür
@@ -345,7 +358,8 @@ function paneliDoldur(s) {
         ${ozet}
         <h3>Gezegenler</h3>
         ${gezegenler.length ? `<ul class="yp-cipler">${cipler(gezegenler)}</ul>` : '<p class="yp-bos">Kayıtlı gezegen yok.</p>'}
-        ${uydular.length ? `<h3>Uydular</h3><ul class="yp-cipler">${cipler(uydular)}</ul>` : ''}
+        ${uydular.length ? `<h3>Uydular</h3><ul class="yp-cipler">${uydular.map(u =>
+            `<li>${linkVeyaYazi(u.ad)}${u.gezegen && !String(u.ad).includes('(') ? `<span class="yp-ebeveyn"> · ${esc(u.gezegen)}</span>` : ''}</li>`).join('')}</ul>` : ''}
         <h3>Vermis bağlantıları</h3>
         ${komsular.length ? `<ul class="yp-komsular">${komsuHtml}</ul>` : '<p class="yp-bos">Bağlantı yok.</p>'}
         <a class="yp-wiki" href="${wikiUrl(s.isim)}" data-git>Wiki sayfasına git →</a>`;
@@ -374,8 +388,8 @@ function aramaHazirla() {
         aramaKayitlari.push({ ad: sistem.isim, yildiz: sistem.isim, devlet: sistem.devlet, tur: 'yıldız' });
         for (const g of (sistem.gezegenler || []).filter(Boolean))
             aramaKayitlari.push({ ad: g, yildiz: sistem.isim, devlet: sistem.devlet, tur: 'gezegen' });
-        for (const u of (sistem.Uydular || []).filter(Boolean))
-            aramaKayitlari.push({ ad: u, yildiz: sistem.isim, devlet: sistem.devlet, tur: 'uydu' });
+        for (const u of sistemUydulari(sistem))
+            aramaKayitlari.push({ ad: u.ad, yildiz: sistem.isim, devlet: sistem.devlet, tur: 'uydu', gezegen: u.gezegen });
     }
     aramaKayitlari.forEach(k => k.k = anahtar(k.ad));
     return aramaKayitlari;
@@ -395,7 +409,9 @@ function aramaGoster() {
     aramaListe.innerHTML = aramaSonuclari.length
         ? aramaSonuclari.map((k, i) => {
             const renk = DEVLET_RENK[k.devlet] || '#8b93a3';
-            const alt = k.tur === 'yıldız' ? (k.devlet ? devletAdi(k.devlet) : 'Bağımsız') : `${k.tur === 'uydu' ? 'Uydu' : 'Gezegen'} · ${k.yildiz} sistemi`;
+            const alt = k.tur === 'yıldız' ? (k.devlet ? devletAdi(k.devlet) : 'Bağımsız')
+                : k.tur === 'uydu' ? `Uydu · ${k.gezegen && !k.ad.includes('(') ? k.gezegen + ' · ' : ''}${k.yildiz} sistemi`
+                : `Gezegen · ${k.yildiz} sistemi`;
             return `<li role="option" data-i="${i}" class="${i === aramaSecili ? 'secili' : ''}">` +
                 `<span class="yp-nokta" style="background:${esc(renk)}"></span><span class="ara-ad">${esc(k.ad)}</span>` +
                 `<span class="ara-alt">${esc(alt)}</span></li>`;

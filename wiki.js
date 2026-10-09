@@ -26,7 +26,7 @@ const LISTELER = {
     "gok-cisimleri": { ad: "Gök Cisimleri", aciklama: "Bilinen Galaksi'deki gök cisimleri.", alt: ["yildizlar", "gezegenler", "uydular", "istasyonlar"] },
     "yildizlar":     { ad: "Yıldızlar", ust: "gok-cisimleri", aciklama: "Bilinen yıldız sistemleri, bağlı oldukları devletlere göre." },
     "gezegenler":    { ad: "Gezegenler", ust: "gok-cisimleri", turler: ["gezegen"], evren: "gezegenler", aciklama: "Gezegenler, bulundukları yıldız sistemine göre." },
-    "uydular":       { ad: "Uydular", ust: "gok-cisimleri", turler: ["uydu"], evren: "Uydular", aciklama: "Uydular, bulundukları yıldız sistemine göre." },
+    "uydular":       { ad: "Uydular", ust: "gok-cisimleri", turler: ["uydu"], sistemeGore: true, aciklama: "Uydular, bulundukları yıldız sistemine göre." },
     "istasyonlar":   { ad: "Uzay İstasyonları", ust: "gok-cisimleri", turler: ["istasyon"], aciklama: "Galaksideki uzay istasyonları." },
     "karakterler":   { ad: "Karakterler", turler: ["karakter"], aciklama: "Bilinen Galaksi'nin insanları." },
     "sehirler":      { ad: "Şehirler", turler: ["sehir"], aciklama: "Gezegenlerdeki ve uydulardaki yerleşimler." },
@@ -407,9 +407,9 @@ function uyduEbeveyni(ad, gezegenler) {
         || null;
 }
 
-/** Sistemdeki uydular: [{ad, ebeveyn}] */
+/** Sistemdeki uydular: [{ad, ebeveyn}] — yalnızca yayınlanmış uydu notlarından ("sistem: [[Yıldız]]") */
 function sistemUydulari(s, gezegenler) {
-    const adlar = (s.Uydular || s.uydular || []).filter(u => u && String(u).trim());
+    const adlar = [];
     const ak = anahtar(s.isim);
     DIZIN.maddeler.filter(x => x.tur === "uydu" && anahtar(sistemAdiCoz(x.ozellikler?.sistem) || "") === ak)
         .forEach(x => { if (!adlar.some(u => anahtar(u) === anahtar(x.ad))) adlar.push(x.ad); });
@@ -711,7 +711,7 @@ function listeKayitlari(k) {
         }
     }
     for (const m of DIZIN.maddeler.filter(m => (L.turler || []).includes(m.tur))) {
-        const grup = L.evren ? (sistemAdiCoz(m.ozellikler?.sistem) || "Sistemi bilinmeyen") : (L.grupla ? (TUR_COGUL[m.tur] || "Diğer") : "");
+        const grup = (L.evren || L.sistemeGore) ? (sistemAdiCoz(m.ozellikler?.sistem) || "Sistemi bilinmeyen") : (L.grupla ? (TUR_COGUL[m.tur] || "Diğer") : "");
         kayit.set(anahtar(m.ad), { ad: m.ad, grup });
     }
     return [...kayit.values()];
