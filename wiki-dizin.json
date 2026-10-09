@@ -5,7 +5,7 @@
       "ad": "Başlangıç",
       "pov": "Tolya",
       "dosya": "roman/(1) Başlangıç (Tolya).md",
-      "imza": "919163bec1d6",
+      "imza": "1832c746a051",
       "ilk_yayin": "2026-08-21",
       "son_degisim": "2026-10-09"
     },
@@ -14,7 +14,7 @@
       "ad": "Aforoz",
       "pov": "Kina",
       "dosya": "roman/(2) Aforoz (Kina).md",
-      "imza": "f6e19fae2ec4",
+      "imza": "33f5400527ca",
       "ilk_yayin": "2026-08-27",
       "son_degisim": "2026-10-09"
     },
@@ -179,6 +179,22 @@
       "ozet": "",
       "klasor": null,
       "imza": "8ba8daea8363",
+      "ilk_yayin": "2026-10-09",
+      "son_degisim": "2026-10-09"
+    },
+    {
+      "ad": "Destek Ayakkabısı",
+      "slug": "Destek_Ayakkabısı",
+      "kategori": "Teknoloji",
+      "dosya": "wiki/Teknoloji/Destek_Ayakkabısı.md",
+      "tur": "teknoloji",
+      "ilk_bolum": null,
+      "aliases": [],
+      "ozellikler": {},
+      "baglantilar": [],
+      "ozet": "",
+      "klasor": null,
+      "imza": "bf6cd1816ce3",
       "ilk_yayin": "2026-10-09",
       "son_degisim": "2026-10-09"
     },
@@ -763,6 +779,7 @@
     "wiki/Gok_Cisimleri/Gezegenler/Venüs.md",
     "wiki/Gok_Cisimleri/Yildizlar/Eminence.md",
     "wiki/Gok_Cisimleri/Yildizlar/Tau_Ceti.md",
-    "wiki/Teknoloji/Antimadde_Motoru.md"
+    "wiki/Teknoloji/Antimadde_Motoru.md",
+    "wiki/Teknoloji/Destek_Ayakkabısı.md"
   ]
 }
